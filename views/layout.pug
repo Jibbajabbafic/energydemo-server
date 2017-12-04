@@ -1,0 +1,14 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    // Load socket.io
+    script(src='/socket.io/socket.io.js')
+    // Load jQuery
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+    // Load canvasJS
+    script(src='/javascripts/jquery.canvasjs.min.js')
+    block head
+  body
+    block content

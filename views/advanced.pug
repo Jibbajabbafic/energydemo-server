@@ -1,0 +1,16 @@
+extends layout
+
+block head
+  script(src='https://cdn.pubnub.com/sdk/javascript/pubnub.4.17.0.js')
+  script(src='/javascripts/advanced.js')
+
+block content
+  h1= title
+  p Welcome to #{title}
+  // Link back to basic view
+  a(href='/') Basic View
+  .chartHolder
+    .chart#chartContainer1
+    .chart#chartContainer2
+    .chart#chartContainer3
+    .chart#chartContainer4

@@ -1,0 +1,12 @@
+extends layout
+
+block head
+  script(src='https://cdn.pubnub.com/sdk/javascript/pubnub.4.17.0.js')
+  script(src='/javascripts/advanced.js')
+
+block content
+  h1= title
+  p Welcome to #{title}
+  a(href='/advanced') Advanced view
+  .chartHolder
+    .chart#barChart
