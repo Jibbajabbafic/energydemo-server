@@ -12,18 +12,7 @@ var electricStats = {
     energyArry: []
 };
 
-// var updateChart = function(){};
-// var updateStatArry = function(){};
-// var renderAllCharts = function(){};
 var updateHolders = function(){};
-
-var x = 0;
-var startRand = false;
-var intervalID;
-
-var testMsg = {
-    text: 'test msg number: ' + x
-};
 
 // ----- PubNub Stuff -----
 var pubnub = new PubNub({
@@ -60,7 +49,6 @@ $(document).ready( function() {
             title: "Power (W)"
         },
         data: [{
-            showInLegend: true,
             type: "line",
             dataPoints: electricStats.powerArry
         }]

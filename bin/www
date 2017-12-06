@@ -9,6 +9,12 @@ var debug = require('debug')('energydemo-server:server');
 var http = require('http');
 
 /**
+ * Add python-shell module to execute python scripts
+ */
+
+var PythonShell = require('python-shell');
+
+/**
  * Get port from environment and store in Express.
  */
 
@@ -22,10 +28,24 @@ app.set('port', port);
 var server = http.createServer(app);
 
 /**
- * Enable socket.io.
+ * Setup socket.io and define all functionality
  */
 
- var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server);
+
+io.on('connection', function(client){
+  console.log('Client connected');
+  
+  io.on('disconnect', function(client){
+    console.log('Client disconnected on: ' + client);
+  });
+});
+
+/**
+ * Schedule function to read sensor every x seconds
+ */
+
+setInterval(function(){runPython('./bin/python/read_sensor.py')}, 1 * 1000);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -99,4 +119,13 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+}
+
+function runPython(scriptPath) {
+  // console.log('Attempting to run:' + scriptPath);
+  PythonShell.run(scriptPath, function (err, data) {
+    if (err) return err;
+    // console.log('Returned: ' + data);
+    io.emit('stats', data);
+  });  
 }

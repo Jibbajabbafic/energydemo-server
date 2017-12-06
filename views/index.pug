@@ -1,12 +1,17 @@
 extends layout
 
-block head
-  script(src='https://cdn.pubnub.com/sdk/javascript/pubnub.4.17.0.js')
-  script(src='/javascripts/advanced.js')
-
 block content
-  h1= title
-  p Welcome to #{title}
-  a(href='/advanced') Advanced view
-  .chartHolder
-    .chart#barChart
+    .banner
+        img(src='/images/lightbulb.png').bannerBox#lightbulb    
+        .bannerBox
+            h1= title
+            p Welcome to #{title}
+            // Link to advanced view
+            a(href='/advanced')
+                button.btn Advanced view
+            br
+            button.btn#getData Get sensor data
+            #pythonMessage
+    .chartHolder
+        .chart#barChart1
+    //- .chart#barChart2
