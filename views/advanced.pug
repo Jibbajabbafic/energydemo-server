@@ -1,16 +1,23 @@
 extends layout
 
-block head
-  // Load PubNub
-  script(src='https://cdn.pubnub.com/sdk/javascript/pubnub.4.17.0.js')
-
 block content
-  h1= title
-  p Welcome to #{title}
-  // Link back to basic view
-  a(href='/') Basic View
-  .chartHolder
-    .chart#chartContainer1
-    .chart#chartContainer2
-    .chart#chartContainer3
-    .chart#chartContainer4
+    .banner
+        img(src='/images/lightbulb.png').bannerBox#lightbulb
+        .bannerBox
+        h1= title
+        p Welcome to #{title}
+        // Link back to basic view
+        a(href='/')
+            button.btn Basic view
+        br
+        button.btn#toggleRead Toggle Readings
+    .chartHolder
+        .chart#chartContainer1
+        .chart#chartContainer2
+        .chart#chartContainer3
+        .chart#chartContainer4
+    .statsHolder
+        p.stat#power
+        p.stat#voltage
+        p.stat#current
+        p.stat#energy
