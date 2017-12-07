@@ -1,37 +1,47 @@
 body {
-  padding: 0em 1em;
-  font: 1em "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 0em 1em;
+    font: 1em "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
 }
 
 .chartHolder {
-  max-height: 80%;
-  margin: auto;
+    max-height: 80%;
+    margin: auto;
+}
+
+.statsHolder {
+    max-height: 80%;
+    margin: auto;
 }
 
 .chart {
-  display: inline-block;
-  width: 24%;
-  min-width: 3em;
+    display: inline-block;
+    width: 24%;
+    min-width: 3em;
+}
+
+.stats {
+    display: inline-block;
 }
 
 .banner {
-  width: 100%;
-  min-height: 5em;
-  margin: auto;
+    width: 100%;
+    min-height: 5em;
+    margin: auto;
 }
 
 .bannerBox {
-  display: inline-block;
-  min-width: 5em;
-  max-width: 50%;
+    display: inline-block;
+    min-width: 5em;
+    max-width: 75%;
+    vertical-align: top;
 }
 
-#barChart1{
-  width: 100%;
+#powerChart {
+    width: 100%;
 }
 
 button {
@@ -49,8 +59,9 @@ button {
     height: 1.5em;
 }
 
-img#lightbulb{
-  padding-right: 2em;
-  height: auto;
-  max-width: 5em;
+img#lightbulb {
+    padding-top: 2em;
+    padding-right: 2em;
+    height: auto;
+    max-width: 5em;
 }
