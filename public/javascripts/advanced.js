@@ -14,27 +14,34 @@ var electricStats = {
 
 var updateHolders = function(){};
 
-// ----- PubNub Stuff -----
-var pubnub = new PubNub({
-    subscribeKey: "sub-c-1089702c-c016-11e7-97ca-5a9f8a2dd46d",
-    publishKey: "pub-c-d0429aa8-023b-4f06-9d6d-fb916ae807f1",
-    ssl: true
+// ----- Socket.io Code -----
+// Define socket which automatically uses the connected server
+var socket = io();
+
+// Define what to do when stats are received
+socket.on('stats', function(data) {
+    var parsedData = JSON.parse(data);
+    console.log('Received stats: ');
+    console.log(parsedData);
+    // pushStats(electricStats, 'power', parsedData);
+    updateHolders(parsedData, electricStats);
 });
 
-pubnub.addListener({
-    message: function(m) {
-        console.log(m);
-        updateHolders(m.message, electricStats);
+// Code to update button colour based on if reading sensor
+socket.on('toggleStatus', function(data){
+    if (data) {
+        $('#toggleRead').css('background-color', '#90e79e');
+    } else {
+        $('#toggleRead').css('background-color', '#e79090');
     }
-});
-
-pubnub.subscribe({
-    channels: ['rpi']
 });
 
 // ----- jQuery Functions -----
 $(document).ready( function() {
-
+    $('#toggleRead').on('click', function(){
+        console.log('TOGGLING');
+        socket.emit('toggle', '');
+    });
     // ----- CanvasJS stuff -----
 
     // Create new charts to hold our data
@@ -49,7 +56,7 @@ $(document).ready( function() {
             title: "Power (W)"
         },
         data: [{
-            type: "line",
+            type: "spline",
             dataPoints: electricStats.powerArry
         }]
     });
@@ -65,8 +72,7 @@ $(document).ready( function() {
             title: "Voltage (V)"
         },
         data: [{
-            showInLegend: true,
-            type: "line",
+            type: "spline",
             dataPoints: electricStats.voltageArry
         }]
     });
@@ -82,8 +88,7 @@ $(document).ready( function() {
             title: "Current (A)"
         },
         data: [{
-            showInLegend: true,
-            type: "line",
+            type: "spline",
             dataPoints: electricStats.currentArry
         }]
     });
@@ -99,8 +104,7 @@ $(document).ready( function() {
             title: "Energy (J)"
         },
         data: [{
-            showInLegend: true,
-            type: "line",
+            type: "spline",
             dataPoints: electricStats.energyArry
         }]
     });
@@ -110,10 +114,6 @@ $(document).ready( function() {
         chart2.render();
         chart3.render();
         chart4.render();
-    }
-
-    function randGen(offset, mult) {
-        return Math.random() * mult + offset;
     }
 
     var updateStatArry = function(statObj, statArry, xVal, yVal) {
@@ -134,12 +134,11 @@ $(document).ready( function() {
     };
 
     updateHolders = function(msgObj, statsObj) {
-        var power = msgObj.voltage * msgObj.current;
-        energyTemp += power;
+        energyTemp += msgObj.power;
 
         updateStatArry(statsObj, 'voltageArry', timeVal, msgObj.voltage);
         updateStatArry(statsObj,'currentArry', timeVal, msgObj.current);
-        updateStatArry(statsObj,'powerArry', timeVal, power);
+        updateStatArry(statsObj,'powerArry', timeVal, msgObj.power);
         updateStatArry(statsObj,'energyArry', timeVal, energyTemp);
     
         timeVal++;

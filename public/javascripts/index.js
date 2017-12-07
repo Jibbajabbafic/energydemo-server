@@ -1,7 +1,6 @@
 // ----- General Functions -----
 
 var MAX_DATAPOINTS = 1;
-var timeVal = 0;
 var energyTemp = 0;
 
 // Array to hold our data
@@ -27,38 +26,36 @@ socket.on('stats', function(data) {
     updateHolders(parsedData, electricStats);
 });
 
-// ----- PubNub Code -----
-// var pubnub = new PubNub({
-//     subscribeKey: "sub-c-1089702c-c016-11e7-97ca-5a9f8a2dd46d",
-//     publishKey: "pub-c-d0429aa8-023b-4f06-9d6d-fb916ae807f1",
-//     ssl: true
-// });
-
-// pubnub.addListener({
-//     message: function(m) {
-//         console.log(m);
-//         updateHolders(m.message, electricStats);
-//     }
-// });
-
-// pubnub.subscribe({
-//     channels: ['rpi']
-// });
+// Code to update button colour based on if reading sensor
+socket.on('toggleStatus', function(data){
+    if (data) {
+        $('#toggleRead').css('background-color', '#90e79e');
+    } else {
+        $('#toggleRead').css('background-color', '#e79090');
+    }
+});
 
 // ----- jQuery Functions -----
 $(document).ready( function() {
-
+    // When clicked emits a 'toggle' event
+    $('#toggleRead').on('click', function(){
+        console.log('TOGGLING');
+        socket.emit('toggle', '');
+    });
     // ----- CanvasJS stuff -----
 
     // Create new charts to hold our data
-    var barChart1 = new CanvasJS.Chart("barChart1", {
+    var barChartPower = new CanvasJS.Chart("powerChart", {
         title: {
             text: "Power Output"
         },
         axisY: {
             title: "Power (W)",
+            suffix: "W",
             viewportMinimum: 0,
             viewportMaximum: 1000,
+            animationEnabled: true,
+            animationDuration: 5000,
             stripLines:[
                 {                
                     value: 10,
@@ -79,6 +76,12 @@ $(document).ready( function() {
                     showOnTop: true
                 },
                 {                
+                    value: 200,
+                    color: '#ffc400',
+                    label: "Fan",
+                    showOnTop: true
+                },
+                {                
                     value: 700,
                     color: '#ffc400',
                     label: "Toaster",
@@ -89,6 +92,8 @@ $(document).ready( function() {
         },
         data: [{
             type: "bar",
+            xValueType: "dateTime",
+            xValueFormatString: "HH:mm:ss.fff",
             dataPoints: electricStats.powerArry
         }]
     });
@@ -111,17 +116,18 @@ $(document).ready( function() {
     // });
 
     var renderAllCharts = function() {
-        barChart1.render();
+        barChartPower.render();
         // barChart2.render();
     }
 
-    var updateStatArry = function(statObj, statArry, xVal, yVal) {
+    var updateStatArry = function(statObj, statArry, labelStr, xVal, yVal) {
         if (isNaN(yVal)) {
             console.log('Error! yVal is not a number!');
             return;
         }
         else {
             statObj[statArry].push({
+                label: labelStr,
                 x: xVal,
                 y: yVal
             });
@@ -133,18 +139,20 @@ $(document).ready( function() {
     };
 
     updateHolders = function(msgObj, statsObj) {
-        energyTemp += msgObj.power;
+        var timestamp = Date.parse(msgObj.time);
 
-        updateStatArry(statsObj, 'voltageArry', timeVal, msgObj.voltage);
-        updateStatArry(statsObj,'currentArry', timeVal, msgObj.current);
-        updateStatArry(statsObj,'powerArry', timeVal, msgObj.power);
-        updateStatArry(statsObj,'energyArry', timeVal, energyTemp);
+        // energyTemp += msgObj.power;
+
+        // updateStatArry(statsObj, 'voltageArry', 'Voltage', timeVal, msgObj.voltage);
+        // updateStatArry(statsObj,'currentArry', 'Current', timeVal, msgObj.current);
+        updateStatArry(statsObj,'powerArry', 'Handcrank', timestamp, msgObj.power);
+        // updateStatArry(statsObj,'energyArry', 'Energy', timeVal, energyTemp);
     
-        timeVal++;
+        // timeVal++;
     
         // $(voltageHolder).text(msgObj.voltage);
         // $(currentHolder).text(msgObj.current);
-        // $(powerHolder).text(power);
+        // $(powerHolder).text(msgObj.power);
         // $(rpm0Holder).text(msgObj.rpm0);
         // $(rpm1Holder).text(msgObj.rpm1);
         // $(rpm2Holder).text(msgObj.rpm2);

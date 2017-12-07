@@ -1,6 +1,15 @@
 #!/usr/bin/env node
 
 /**
+ * Variables to change functionality easily
+ */
+
+// Time between samples in seconds
+var SAMPLE_TIME = 1;
+// When true, stops readings if no clients connected
+var ONLY_READ_WHEN_CLIENTS_CONNECTED = false;
+
+/**
  * Module dependencies.
  */
 
@@ -18,7 +27,7 @@ var PythonShell = require('python-shell');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '80');
 app.set('port', port);
 
 /**
@@ -33,19 +42,53 @@ var server = http.createServer(app);
 
 var io = require('socket.io').listen(server);
 
-io.on('connection', function(client){
-  console.log('Client connected');
-  
-  io.on('disconnect', function(client){
-    console.log('Client disconnected on: ' + client);
-  });
+var readSensorFlag = 0;
+var clientCount = 0;
+
+io.on('connection', function (client) {
+    // Keep track of connected clients
+    console.log('Client connected');
+    clientCount++;
+    console.log('Connected clients: ' + clientCount);
+    
+    // Tell the user the status of the sensor script
+    io.emit('toggleStatus', readSensorFlag);
+
+    client.on('disconnect', function () {
+        console.log('Client disconnected');
+        if (clientCount > 0) clientCount--;
+        console.log('Connected clients: ' + clientCount);
+        // Optional code to stop readings when no clients connected
+        if (ONLY_READ_WHEN_CLIENTS_CONNECTED) {
+            if (clientCount == 0 && readSensorFlag) {
+                console.log('No clients connected, stopping readings...')
+                clearInterval(intervalID);
+                readSensorFlag = 0;
+            };
+        };
+    });
+
+    client.on('toggle', function () {
+        if (readSensorFlag) {
+            console.log('Stopping readings...')
+            clearInterval(intervalID);
+            readSensorFlag = 0;
+        } else {
+            console.log('Starting readings...')
+            intervalID = setInterval(function () {
+                runPython('./bin/python/read_sensor.py')
+            }, SAMPLE_TIME * 1000);
+            readSensorFlag = 1;
+        }
+        io.emit('toggleStatus', readSensorFlag);
+    });
 });
 
 /**
  * Schedule function to read sensor every x seconds
  */
 
-setInterval(function(){runPython('./bin/python/read_sensor.py')}, 1 * 1000);
+// intervalID = setInterval(function(){runPython('./bin/python/read_sensor.py')}, 1 * 1000);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -66,19 +109,19 @@ console.log('Server started on: http://localhost:' + port)
  */
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+    var port = parseInt(val, 10);
 
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
 
-  if (port >= 0) {
-    // port number
-    return port;
-  }
+    if (port >= 0) {
+        // port number
+        return port;
+    }
 
-  return false;
+    return false;
 }
 
 /**
@@ -86,27 +129,27 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+    var bind = typeof port === 'string' ?
+        'Pipe ' + port :
+        'Port ' + port;
 
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
 }
 
 /**
@@ -114,18 +157,18 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+    var addr = server.address();
+    var bind = typeof addr === 'string' ?
+        'pipe ' + addr :
+        'port ' + addr.port;
+    debug('Listening on ' + bind);
 }
 
 function runPython(scriptPath) {
-  // console.log('Attempting to run:' + scriptPath);
-  PythonShell.run(scriptPath, function (err, data) {
-    if (err) return err;
-    // console.log('Returned: ' + data);
-    io.emit('stats', data);
-  });  
+    // console.log('Attempting to run:' + scriptPath);
+    PythonShell.run(scriptPath, function (err, data) {
+        if (err) return err;
+        // console.log('Returned: ' + data);
+        io.emit('stats', data);
+    });
 }
