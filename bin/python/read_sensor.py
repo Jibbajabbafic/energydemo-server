@@ -1,9 +1,14 @@
 #!/usr/bin/python
+
 """ Script to be run by the server to get data from the INA219 sensor """
+import json
 from datetime import datetime
 from random import uniform
 from random import randint
-import json
+from ina219 import INA219
+from ina219 import DeviceRangeError
+
+SHUNT_OHMS = 0.1
 
 STATS = {
     'time': 0.0,
@@ -25,9 +30,25 @@ def gen_rand_data(obj):
     obj['rpm1'] = randint(100, 2000)
     obj['rpm2'] = randint(100, 1000)
 
+def read_sensor(obj):
+    """ Read the INA219 sensor and put the readings into 'obj' """
+    ina = INA219(SHUNT_OHMS)
+    ina.configure()
+
+    try:
+        obj['time'] = str(datetime.utcnow())
+        obj['voltage'] = ina.voltage()
+        obj['current'] = ina.current()
+        obj['power'] = ina.power()
+
+    except DeviceRangeError as error_msg:
+        # Current out of device range with specified shunt resister
+        print(error_msg)
+
 try:
-    gen_rand_data(STATS)
-except Exception as e:
-    print('Error: ' + str(e))
+    # gen_rand_data(STATS)
+    read_sensor(STATS)
+except Exception as error_msg:
+    print('Error: ' + str(error_msg))
 else:
     print(json.dumps(STATS))
