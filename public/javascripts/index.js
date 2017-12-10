@@ -19,11 +19,11 @@ var socket = io();
 
 // Define what to do when stats are received
 socket.on('stats', function(data) {
-    var parsedData = JSON.parse(data);
+    // var parsedData = data[0];
     console.log('Received stats: ');
-    console.log(parsedData);
+    console.log(data);
     // pushStats(electricStats, 'power', parsedData);
-    updateHolders(parsedData, electricStats);
+    updateHolders(data, electricStats);
 });
 
 // Code to update button colour based on if reading sensor
@@ -140,7 +140,7 @@ $(document).ready( function() {
 
     updateHolders = function(msgObj, statsObj) {
         var timestamp = Date.parse(msgObj.time);
-
+        console.log('Timestamp: ' + timestamp);
         // energyTemp += msgObj.power;
 
         // updateStatArry(statsObj, 'voltageArry', 'Voltage', timeVal, msgObj.voltage);

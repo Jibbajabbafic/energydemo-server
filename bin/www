@@ -23,11 +23,18 @@ var http = require('http');
 
 var PythonShell = require('python-shell');
 
+// Set up default options
+PythonShell.defaultOptions = { 
+    mode: 'json',
+    // pythonPath: '/usr/bin/python3',
+    scriptPath: './bin/python'
+};
+
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '80');
+var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
@@ -76,7 +83,7 @@ io.on('connection', function (client) {
         } else {
             console.log('Starting readings...')
             intervalID = setInterval(function () {
-                runPython('./bin/python/read_sensor.py')
+                runPython('read_sensor.py')
             }, SAMPLE_TIME * 1000);
             readSensorFlag = 1;
         }
@@ -164,11 +171,12 @@ function onListening() {
     debug('Listening on ' + bind);
 }
 
-function runPython(scriptPath) {
+function runPython(scriptName) {
     // console.log('Attempting to run:' + scriptPath);
-    PythonShell.run(scriptPath, function (err, data) {
+    PythonShell.run(scriptName, function (err, data) {
         if (err) return err;
-        // console.log('Returned: ' + data);
-        io.emit('stats', data);
+        // console.log('Returning: ');
+        // console.log(data[0]);
+        io.emit('stats', data[0]);
     });
 }
