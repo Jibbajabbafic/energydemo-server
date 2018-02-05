@@ -46,8 +46,8 @@ def read_sensor(obj):
         print(error_msg)
 
 try:
-    # gen_rand_data(STATS)
-    read_sensor(STATS)
+    gen_rand_data(STATS)
+    # read_sensor(STATS)
 except Exception as error_msg:
     print('Error: ' + str(error_msg))
 else:

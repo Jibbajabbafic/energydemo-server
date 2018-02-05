@@ -1,6 +1,7 @@
 var rpio = require('rpio');
 
-var startTime, endTime, period, rps, rpm;
+var startTime, endTime, period, rps;
+var rpm = 0;
 var count = 0;
 var initial = true;
 var pinNum = 12;

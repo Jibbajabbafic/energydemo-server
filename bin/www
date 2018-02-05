@@ -13,6 +13,8 @@ var ONLY_READ_WHEN_CLIENTS_CONNECTED = false;
  * Module dependencies.
  */
 
+// var rpm = require('./node/read_rpm');
+
 var app = require('../app');
 var debug = require('debug')('energydemo-server:server');
 var http = require('http');
@@ -178,5 +180,6 @@ function runPython(scriptName) {
         // console.log('Returning: ');
         // console.log(data[0]);
         io.emit('stats', data[0]);
+        // io.emit('rpm', rpm.rpm);
     });
 }

@@ -13,6 +13,7 @@ a {
 }
 
 .statsHolder {
+    min-height: 1.5em;
     max-height: 80%;
     margin: auto;
 }
@@ -23,8 +24,12 @@ a {
     min-width: 3em;
 }
 
-.stats {
+.stat {
     display: inline-block;
+    width: 24%;
+    max-width: 24%;
+    min-width: 3em;
+    margin: 0 auto;
 }
 
 .banner {
