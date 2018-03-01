@@ -1,6 +1,6 @@
 // ------------------------------ General Functions ------------------------------
 
-var MAX_DATAPOINTS = 20;
+var MAX_DATAPOINTS = 50;
 var energyTemp = 0;
 
 // Array to hold our data
@@ -12,12 +12,55 @@ var electricStats = {
     rpmArry: []
 };
 
-var updateHolders = function(){};
+var statList = [
+    {
+        name: "bike", 
+        voltageArry: [],
+        currentArry: [],
+        powerArry: [],
+        energyArry: [],
+        rpmArry: []
+    },
+    {
+        name: "handcrank", 
+        voltageArry: [],
+        currentArry: [],
+        powerArry: [],
+        energyArry: [],
+        rpmArry: []
+    },
+];
+
+// var updateHolders = function(){};
+var updateStats = function(){};
+
+function searchList(list, property, value) {
+    for (var i = 0; i < list.length; i++) {
+        if (list[i][property] == value) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+// function makeEntry(msgObj, statsObj) {
+//     console.log("Making entry!");
+//     return -1 + statList.push({
+//         name: msgObj.name, 
+//         voltageArry: [],
+//         currentArry: [],
+//         powerArry: [],
+//         energyArry: [],
+//         rpmArry: []
+//     })
+// };    
 
 function changeTab(tabID) {
 	// Hide all tabs
     $(".tab").hide();
+    $("button.nav").prop('disabled', false);
     // Show specified tab with id = tabID
+    $("button.nav#" + tabID).prop('disabled', true);
 	$(".tab#" + tabID).show();
 };
 
@@ -28,11 +71,11 @@ var socket = io();
 
 // Define what to do when stats are received
 socket.on('stats', function(data) {
-    // var parsedData = JSON.parse(data);
     console.log('Received stats: ');
     console.log(data);
-    // pushStats(electricStats, 'power', parsedData);
-    updateHolders(data, electricStats);
+
+    // updateHolders(data, electricStats);
+    updateStats(data);
 });
 
 // Code to update button colour based on if reading sensor
@@ -68,10 +111,9 @@ $(document).ready( function() {
     // ------------------------------ CanvasJS stuff ------------------------------
 
     // ----- Basic view charts -----
-
-    var chartBasic1 = new CanvasJS.Chart("chartContainerPower", {
+    var basicChartPowerOptions = {
         title: {
-            text: "Power Output"
+            text: "Power Output of " + statList[0].name
         },
         axisY: {
             title: "Power (W)",
@@ -106,6 +148,12 @@ $(document).ready( function() {
                     showOnTop: true
                 },
                 {                
+                    value: 250,
+                    color: '#ffc400',
+                    label: "Travel Kettle",
+                    showOnTop: true
+                },                
+                {                
                     value: 700,
                     color: '#ffc400',
                     label: "Toaster",
@@ -118,15 +166,17 @@ $(document).ready( function() {
             type: "bar",
             xValueType: "dateTime",
             xValueFormatString: "HH:mm:ss.fff",
-            dataPoints: electricStats.powerArry[0]
+            dataPoints: statList[0].powerArry
         }]
-    });
+    };
+
+    var chartBasic1 = new CanvasJS.Chart("chartContainerPower", basicChartPowerOptions);
 
     // ----- Advanced view charts -----
 
     var chartAdv1 = new CanvasJS.Chart("chartContainer1", {
         title: {
-            text: "Power Output"
+            text: "Power Output of " + statList[0].name
         },
         axisX: {
             title: "Time (s)"
@@ -138,13 +188,13 @@ $(document).ready( function() {
             type: "spline",
             xValueType: "dateTime",
             xValueFormatString: "HH:mm:ss",
-            dataPoints: electricStats.powerArry
+            dataPoints: statList[0].powerArry
         }]
     });
 
     var chartAdv2 = new CanvasJS.Chart("chartContainer2", {
         title: {
-            text: "Voltage Output"
+            text: "Voltage Output of " + statList[0].name
         },
         axisX: {
             title: "Time (s)"
@@ -156,13 +206,13 @@ $(document).ready( function() {
             type: "spline",
             xValueType: "dateTime",
             xValueFormatString: "HH:mm:ss",
-            dataPoints: electricStats.voltageArry
+            dataPoints: statList[0].voltageArry
         }]
     });
 
     var chartAdv3 = new CanvasJS.Chart("chartContainer3", {
         title: {
-            text: "Current Output"
+            text: "Current Output of " + statList[0].name
         },
         axisX: {
             title: "Time (s)"
@@ -174,13 +224,13 @@ $(document).ready( function() {
             type: "spline",
             xValueType: "dateTime",
             xValueFormatString: "HH:mm:ss",
-            dataPoints: electricStats.currentArry
+            dataPoints: statList[0].currentArry
         }]
     });
 
     var chartAdv4 = new CanvasJS.Chart("chartContainer4", {
         title: {
-            text: "Cumulative Energy"
+            text: "Cumulative Energy of " + statList[0].name
         },
         axisX: {
             title: "Time (s)"
@@ -192,7 +242,7 @@ $(document).ready( function() {
             type: "spline",
             xValueType: "dateTime",
             xValueFormatString: "HH:mm:ss",
-            dataPoints: electricStats.energyArry
+            dataPoints: statList[0].energyArry
         }]
     });
 
@@ -227,28 +277,59 @@ $(document).ready( function() {
         };
     };
 
-    updateHolders = function(msgObj, statsObj) {
-        var timestamp = Date.parse(msgObj.time);
-        // console.log('Timestamp: ' + timestamp);
-        energyTemp += msgObj.power;
+    // updateHolders = function(msgObj, statsObj) {
+    //     var timestamp = Date.parse(msgObj.time);
+    //     // console.log('Timestamp: ' + timestamp);
+    //     energyTemp += msgObj.power;
 
-        updateStatArry(statsObj, 'voltageArry', timestamp, msgObj.voltage);
-        updateStatArry(statsObj,'currentArry', timestamp, msgObj.current);
-        updateStatArry(statsObj,'powerArry', timestamp, msgObj.power);
-        updateStatArry(statsObj,'rpmArry', timestamp, msgObj.rpm);
-        updateStatArry(statsObj,'energyArry', timestamp, energyTemp);
+    //     updateStatArry(statsObj, 'voltageArry', timestamp, msgObj.voltage);
+    //     updateStatArry(statsObj,'currentArry', timestamp, msgObj.current);
+    //     updateStatArry(statsObj,'powerArry', timestamp, msgObj.power);
+    //     updateStatArry(statsObj,'rpmArry', timestamp, msgObj.rpm);
+    //     updateStatArry(statsObj,'energyArry', timestamp, energyTemp);
     
+    //     $('.stat #voltage').text(msgObj.voltage + " V");
+    //     $('.stat #current').text(msgObj.current + " A");
+    //     $('.stat #power').text(msgObj.power + " W");
+    //     $('.stat #rpm').text(msgObj.rpm + " RPM");
+    //     $('.stat #energy').text(energyTemp + " J");
+    //     // $(rpm0Holder).text(msgObj.rpm0);
+    //     // $(rpm1Holder).text(msgObj.rpm1);
+    //     // $(rpm2Holder).text(msgObj.rpm2);
+    
+    //     renderAllCharts();
+    // };
+    
+    updateStats = function(msgObj) {
+        var timestamp = Date.parse(msgObj.time);
+    
+        statID = searchList(statList, "name", msgObj.name);
+    
+        if (statID === -1) {
+            console.log("Error: that entry does not exist!");
+            // statID = makeEntry(msgObj, statList);
+        }
+    
+        try {
+            var energy = statList[statID].energyArry[0]["y"] + msgObj.power;
+        } catch (TypeError) {
+            var energy = msgObj.power;
+        }
+    
+        updateStatArry(statList[statID], 'voltageArry', timestamp, msgObj.voltage);
+        updateStatArry(statList[statID],'currentArry', timestamp, msgObj.current);
+        updateStatArry(statList[statID],'powerArry', timestamp, msgObj.power);
+        updateStatArry(statList[statID],'rpmArry', timestamp, msgObj.rpm);
+        updateStatArry(statList[statID],'energyArry', timestamp, energy);
+
         $('.stat #voltage').text(msgObj.voltage + " V");
         $('.stat #current').text(msgObj.current + " A");
         $('.stat #power').text(msgObj.power + " W");
         $('.stat #rpm').text(msgObj.rpm + " RPM");
-        $('.stat #energy').text(energyTemp + " J");
-        // $(rpm0Holder).text(msgObj.rpm0);
-        // $(rpm1Holder).text(msgObj.rpm1);
-        // $(rpm2Holder).text(msgObj.rpm2);
-    
+        $('.stat #energy').text(energy + " J");
+
         renderAllCharts();
-    };
+    }
 
     renderAllCharts();    
 });
