@@ -4,8 +4,9 @@
  * Variables to change functionality easily
  */
 
-// Time between samples in seconds
+// Time between samples in seconds (will lag a lot if set too low!)
 var SAMPLE_TIME = 1;
+
 // When true, stops readings if no clients connected
 var ONLY_READ_WHEN_CLIENTS_CONNECTED = false;
 
@@ -13,24 +14,19 @@ var ONLY_READ_WHEN_CLIENTS_CONNECTED = false;
  * Module dependencies.
  */
 
-// var rpm = require('./node/read_rpm');
-
 var app = require('../app');
 var debug = require('debug')('energydemo-server:server');
 var http = require('http');
 
-/**
- * Add python-shell module to execute python scripts
- */
+// Module with all sensor information
+var sensors = require('./node/sensors.js')
 
-var PythonShell = require('python-shell');
 
-// Set up default options
-PythonShell.defaultOptions = { 
-    mode: 'json',
-    // pythonPath: '/usr/bin/python3',
-    scriptPath: './bin/python'
-};
+// Function to be called when reading sensors
+function readSensors() {
+    // Read all sensors and emit using io object
+    sensors.readAll(io);
+}
 
 /**
  * Get port from environment and store in Express.
@@ -84,20 +80,16 @@ io.on('connection', function (client) {
             readSensorFlag = 0;
         } else {
             console.log('Starting readings...')
-            intervalID = setInterval(function () {
-                runPython('read_sensor.py')
+            intervalID = setInterval( function() {
+                // Function to call 
+                readSensors();
+
             }, SAMPLE_TIME * 1000);
             readSensorFlag = 1;
         }
         io.emit('toggleStatus', readSensorFlag);
     });
 });
-
-/**
- * Schedule function to read sensor every x seconds
- */
-
-// intervalID = setInterval(function(){runPython('./bin/python/read_sensor.py')}, 1 * 1000);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -171,15 +163,4 @@ function onListening() {
         'pipe ' + addr :
         'port ' + addr.port;
     debug('Listening on ' + bind);
-}
-
-function runPython(scriptName) {
-    // console.log('Attempting to run:' + scriptPath);
-    PythonShell.run(scriptName, function (err, data) {
-        if (err) return err;
-        // console.log('Returning: ');
-        // console.log(data[0]);
-        io.emit('stats', data[0]);
-        // io.emit('rpm', rpm.rpm);
-    });
 }

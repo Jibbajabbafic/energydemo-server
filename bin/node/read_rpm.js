@@ -8,6 +8,7 @@ var pinNum = 12;
 
 rpio.open(pinNum, rpio.INPUT, rpio.PULL_HIGH);
 
+// Function to be called when input goes low
 function poll_lowcb(pin) {
     if (initial) {
 	console.log('Entered initial phase');
@@ -26,6 +27,10 @@ function poll_lowcb(pin) {
     console.log('%ds', period);
     console.log('%dRPS', rps);
     console.log('%dRPM', rpm);
+}
+
+function getRPM() {
+    return rpm;
 }
 
 console.log('Reading pin %d', pinNum); 
