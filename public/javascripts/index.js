@@ -94,7 +94,7 @@ $(document).ready( function() {
             type: "bar",
             xValueType: "dateTime",
             xValueFormatString: "HH:mm:ss.fff",
-            dataPoints: electricStats.powerArry
+            dataPoints: electricStats.powerArry[0]
         }]
     });
 
