@@ -1,7 +1,5 @@
-// ----- General Functions -----
-
-var MAX_DATAPOINTS = 20;
-var energyTemp = 0;
+// Define socket which automatically uses the connected server
+var socket = io();
 
 var electricStats = {
     voltage: [],
@@ -9,11 +7,6 @@ var electricStats = {
     power: [],
     energy: []
 };
-
-// ----- Socket.io Code -----
-
-// Define socket which automatically uses the connected server
-var socket = io();
 
 socket.on('connect', function(data) {
     socket.emit('join', 'Hello World from client');
