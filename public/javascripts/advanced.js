@@ -1,7 +1,6 @@
 // ----- General Functions -----
 
 var MAX_DATAPOINTS = 20;
-var timeVal = 0;
 var energyTemp = 0;
 
 // Array to hold our data
@@ -20,11 +19,11 @@ var socket = io();
 
 // Define what to do when stats are received
 socket.on('stats', function(data) {
-    var parsedData = JSON.parse(data);
+    // var parsedData = JSON.parse(data);
     console.log('Received stats: ');
-    console.log(parsedData);
+    console.log(data);
     // pushStats(electricStats, 'power', parsedData);
-    updateHolders(parsedData, electricStats);
+    updateHolders(data, electricStats);
 });
 
 // Code to update button colour based on if reading sensor
@@ -57,6 +56,8 @@ $(document).ready( function() {
         },
         data: [{
             type: "spline",
+            xValueType: "dateTime",
+            xValueFormatString: "HH:mm:ss",
             dataPoints: electricStats.powerArry
         }]
     });
@@ -73,6 +74,8 @@ $(document).ready( function() {
         },
         data: [{
             type: "spline",
+            xValueType: "dateTime",
+            xValueFormatString: "HH:mm:ss",
             dataPoints: electricStats.voltageArry
         }]
     });
@@ -89,6 +92,8 @@ $(document).ready( function() {
         },
         data: [{
             type: "spline",
+            xValueType: "dateTime",
+            xValueFormatString: "HH:mm:ss",
             dataPoints: electricStats.currentArry
         }]
     });
@@ -105,6 +110,8 @@ $(document).ready( function() {
         },
         data: [{
             type: "spline",
+            xValueType: "dateTime",
+            xValueFormatString: "HH:mm:ss",
             dataPoints: electricStats.energyArry
         }]
     });
@@ -134,18 +141,19 @@ $(document).ready( function() {
     };
 
     updateHolders = function(msgObj, statsObj) {
+        var timestamp = Date.parse(msgObj.time);
+        // console.log('Timestamp: ' + timestamp);
         energyTemp += msgObj.power;
 
-        updateStatArry(statsObj, 'voltageArry', timeVal, msgObj.voltage);
-        updateStatArry(statsObj,'currentArry', timeVal, msgObj.current);
-        updateStatArry(statsObj,'powerArry', timeVal, msgObj.power);
-        updateStatArry(statsObj,'energyArry', timeVal, energyTemp);
+        updateStatArry(statsObj, 'voltageArry', timestamp, msgObj.voltage);
+        updateStatArry(statsObj,'currentArry', timestamp, msgObj.current);
+        updateStatArry(statsObj,'powerArry', timestamp, msgObj.power);
+        updateStatArry(statsObj,'energyArry', timestamp, energyTemp);
     
-        timeVal++;
-    
-        // $(voltageHolder).text(msgObj.voltage);
-        // $(currentHolder).text(msgObj.current);
-        // $(powerHolder).text(power);
+        $('.stat #voltage').text(msgObj.voltage + " V");
+        $('.stat #current').text(msgObj.current + " A");
+        $('.stat #power').text(msgObj.power + " W");
+        $('.stat #energy').text(energyTemp + " J");
         // $(rpm0Holder).text(msgObj.rpm0);
         // $(rpm1Holder).text(msgObj.rpm1);
         // $(rpm2Holder).text(msgObj.rpm2);

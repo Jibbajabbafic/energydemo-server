@@ -1,10 +1,22 @@
 body {
     padding: 0em 1em;
     font: 1em "Lucida Grande", Helvetica, Arial, sans-serif;
+    margin: auto;
+    background-color: #8c8c8c;
 }
 
 a {
     color: #00B7FF;
+}
+
+.tab {
+    display: none;
+    min-height: 5em;
+    margin: auto;
+}
+
+.generator {
+    min-height: 25%;
 }
 
 .chartHolder {
@@ -13,24 +25,36 @@ a {
 }
 
 .statsHolder {
+    min-height: 1.5em;
     max-height: 80%;
     margin: auto;
 }
 
-.chart {
+.chartAdv{
     display: inline-block;
     width: 24%;
     min-width: 3em;
 }
 
-.stats {
+.chartBasic {
+    width: 100%;
+}
+
+.stat {
     display: inline-block;
+    width: 24%;
+    max-width: 24%;
+    min-width: 3em;
+    margin: 0 auto;
 }
 
 .banner {
-    width: 100%;
+    /* min-width: 80%; */
     min-height: 5em;
-    margin: auto;
+    margin-left: 10em;
+    margin-right: 10em;
+    padding: 2em 10em;
+    background-color: white;
 }
 
 .bannerBox {
@@ -38,10 +62,6 @@ a {
     min-width: 5em;
     max-width: 75%;
     vertical-align: top;
-}
-
-#powerChart {
-    width: 100%;
 }
 
 button {
