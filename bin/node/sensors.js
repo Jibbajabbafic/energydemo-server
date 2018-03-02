@@ -9,7 +9,8 @@ PythonShell.defaultOptions = {
 };
 
 // Module for reading RPM sensors
-var RPMsensor = require('./random_rpm.js');
+var RPMsensor = require('./random_rpm.js'); // Read random RPM data
+// var RPMsensor = require('./read_rpm.js'); // Read pins from hall sensors
 
 // List of all sensors with i2c address and rpmSensor pinNumbers
 var sensorList = [
