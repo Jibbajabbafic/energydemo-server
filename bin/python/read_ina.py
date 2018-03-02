@@ -50,7 +50,7 @@ def read_random():
 
     return stats
 
-# STATS = read_sensor(ADDRESS) # Read INA219 sensors
-STATS = read_random() # Generate random data
+# STATS = read_sensor(ADDRESS)
+STATS = read_random()
 
 print(json.dumps(STATS))
