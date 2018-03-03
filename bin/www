@@ -25,6 +25,7 @@ var sensors = require('./node/sensors.js')
 // Function to be called when reading sensors
 function readSensors() {
     // Read all sensors and emit using io object
+    // console.log("Calling readSensors()");
     sensors.readAll(io);
 }
 

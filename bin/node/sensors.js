@@ -28,9 +28,10 @@ var sensorList = [
 
 function readSensor(sensorObj, socketObj) {
     statPacket = [];
+    // console.log("calling py with address " + sensorObj.address);
     PythonShell.run("read_ina.py", {args: sensorObj.address}, function (err, data) {
         if (err) return err;
-
+	// console.log("calling py with address " + sensorObj.address);
         statPacket = data[0];
         statPacket.rpm = sensorObj.rpmSensor.getRPM();
         statPacket.name = sensorObj.name;

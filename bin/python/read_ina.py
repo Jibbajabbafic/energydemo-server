@@ -16,7 +16,7 @@ SHUNT_OHMS = 0.1
 MAX_EXPECTED_AMPS = None
 
 # Input address arg
-ADDRESS = sys.argv[1]
+ADDRESS = int(sys.argv[1])
 
 STATS = {}
 
