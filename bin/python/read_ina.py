@@ -4,8 +4,6 @@
 import json
 import sys
 from datetime import datetime
-from random import uniform
-from random import randint
 from ina219 import INA219
 from ina219 import DeviceRangeError
 
@@ -39,18 +37,6 @@ def read_sensor(address):
     
     return stats
 
-def read_random():
-    """ Generate random data and return it """
-    stats = {}
-
-    stats['time'] = str(datetime.utcnow())
-    stats['voltage'] = float("%.1f" % uniform(20, 30))
-    stats['current'] = float("%.1f" % uniform(5, 20))
-    stats['power'] = float("%.1f" % (stats['voltage'] * stats['current']))
-
-    return stats
-
-# STATS = read_sensor(ADDRESS) # Read INA219 sensors
-STATS = read_random() # Generate random data
+STATS = read_sensor(ADDRESS) # Read INA219 sensors
 
 print(json.dumps(STATS))
