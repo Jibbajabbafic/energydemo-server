@@ -1,3 +1,27 @@
+var USE_RANDOM_DATA = true;
+
+var pythonScript;
+var RPMsensor;
+
+if (USE_RANDOM_DATA) {
+    // Load appropriate scripts for generating ranodm data
+
+    // Script for random electrical data
+    pythonScript = "read_random.py";
+    
+    // Module for reading RPM sensors
+    RPMsensor = require('./random_rpm.js'); // Read random RPM data
+}
+else {
+    // Load appropriate scripts to read sensors
+
+    // Script for reading INA219 sensors
+    pythonScript = "read_ina.py";
+    
+    // Module for reading RPM sensors
+    RPMsensor = require('./read_rpm.js'); // Read pins from hall sensors
+}
+
 // Module to execute python scripts
 var PythonShell = require('python-shell');
 
@@ -7,10 +31,6 @@ PythonShell.defaultOptions = {
     // pythonPath: '/usr/bin/python3',
     scriptPath: './bin/python'
 };
-
-// Module for reading RPM sensors
-var RPMsensor = require('./random_rpm.js'); // Read random RPM data
-// var RPMsensor = require('./read_rpm.js'); // Read pins from hall sensors
 
 // List of all sensors with i2c address and rpmSensor pinNumbers
 var sensorList = [
@@ -29,7 +49,7 @@ var sensorList = [
 function readSensor(sensorObj, socketObj) {
     statPacket = [];
     // console.log("calling py with address " + sensorObj.address);
-    PythonShell.run("read_ina.py", {args: sensorObj.address}, function (err, data) {
+    PythonShell.run(pythonScript, {args: sensorObj.address}, function (err, data) {
         if (err) return err;
 	// console.log("calling py with address " + sensorObj.address);
         statPacket = data[0];
