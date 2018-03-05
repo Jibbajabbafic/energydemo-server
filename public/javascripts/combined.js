@@ -4,13 +4,13 @@ var MAX_DATAPOINTS = 50;
 var energyTemp = 0;
 
 // Array to hold our data
-var electricStats = {
-    voltageArry: [],
-    currentArry: [],
-    powerArry: [],
-    energyArry: [],
-    rpmArry: []
-};
+// var electricStats = {
+//     voltageArry: [],
+//     currentArry: [],
+//     powerArry: [],
+//     energyArry: [],
+//     rpmArry: []
+// };
 
 var statList = [
     {
@@ -18,6 +18,7 @@ var statList = [
         voltageArry: [],
         currentArry: [],
         powerArry: [],
+        powerArryBasic: [],
         energyArry: [],
         rpmArry: []
     },
@@ -26,6 +27,7 @@ var statList = [
         voltageArry: [],
         currentArry: [],
         powerArry: [],
+        powerArryBasic: [],
         energyArry: [],
         rpmArry: []
     },
@@ -111,7 +113,7 @@ $(document).ready( function() {
     // ------------------------------ CanvasJS stuff ------------------------------
 
     // ----- Basic view charts -----
-    var basicChartPowerOptions = {
+    var basicChartPowerOptions1 = {
         title: {
             text: "Power Output of " + statList[0].name
         },
@@ -170,7 +172,67 @@ $(document).ready( function() {
         }]
     };
 
-    var chartBasic1 = new CanvasJS.Chart("chartContainerPower", basicChartPowerOptions);
+    var basicChartPowerOptions2 = {
+        title: {
+            text: "Power Output of " + statList[1].name
+        },
+        axisY: {
+            title: "Power (W)",
+            suffix: "W",
+            viewportMinimum: 0,
+            viewportMaximum: 1000,
+            animationEnabled: true,
+            animationDuration: 5000,
+            stripLines:[
+                {                
+                    value: 10,
+                    color: '#ffc400',
+                    label: "LED Light",
+                    showOnTop: true
+                },
+                {                
+                    value: 50,
+                    color: '#ffc400',
+                    label: "Fluorescent Light",
+                    showOnTop: true
+                },
+                {                
+                    value: 100,
+                    color: '#ffc400',
+                    label: "Incandescent Light",
+                    showOnTop: true
+                },
+                {                
+                    value: 200,
+                    color: '#ffc400',
+                    label: "Fan",
+                    showOnTop: true
+                },
+                {                
+                    value: 250,
+                    color: '#ffc400',
+                    label: "Travel Kettle",
+                    showOnTop: true
+                },                
+                {                
+                    value: 700,
+                    color: '#ffc400',
+                    label: "Toaster",
+                    showOnTop: true
+                }
+
+            ]
+        },
+        data: [{
+            type: "bar",
+            xValueType: "dateTime",
+            xValueFormatString: "HH:mm:ss.fff",
+            dataPoints: statList[1].powerArry
+        }]
+    };
+
+    var chartBasic1 = new CanvasJS.Chart("chartContainerPower1", basicChartPowerOptions1);
+    var chartBasic2 = new CanvasJS.Chart("chartContainerPower2", basicChartPowerOptions2);
 
     // ----- Advanced view charts -----
 
@@ -228,33 +290,149 @@ $(document).ready( function() {
         }]
     });
 
+    // var chartAdv4 = new CanvasJS.Chart("chartContainer4", {
+    //     title: {
+    //         text: "Cumulative Energy of " + statList[0].name
+    //     },
+    //     axisX: {
+    //         title: "Time (s)"
+    //     },
+    //     axisY: {
+    //         title: "Energy (J)"
+    //     },
+    //     data: [{
+    //         type: "spline",
+    //         xValueType: "dateTime",
+    //         xValueFormatString: "HH:mm:ss",
+    //         dataPoints: statList[0].energyArry
+    //     }]
+    // });
+
     var chartAdv4 = new CanvasJS.Chart("chartContainer4", {
         title: {
-            text: "Cumulative Energy of " + statList[0].name
+            text: "Speed of " + statList[0].name
         },
         axisX: {
             title: "Time (s)"
         },
         axisY: {
-            title: "Energy (J)"
+            title: "Speed (RPM)"
         },
         data: [{
             type: "spline",
             xValueType: "dateTime",
             xValueFormatString: "HH:mm:ss",
-            dataPoints: statList[0].energyArry
+            dataPoints: statList[0].rpmArry
+        }]
+    });
+
+// ---------- NEXT INPUT ----------
+
+    var chartAdv5 = new CanvasJS.Chart("chartContainer5", {
+        title: {
+            text: "Power Output of " + statList[1].name
+        },
+        axisX: {
+            title: "Time (s)"
+        },
+        axisY: {
+            title: "Power (W)"
+        },
+        data: [{
+            type: "spline",
+            xValueType: "dateTime",
+            xValueFormatString: "HH:mm:ss",
+            dataPoints: statList[1].powerArry
+        }]
+    });
+
+    var chartAdv6 = new CanvasJS.Chart("chartContainer6", {
+        title: {
+            text: "Voltage Output of " + statList[1].name
+        },
+        axisX: {
+            title: "Time (s)"
+        },
+        axisY: {
+            title: "Voltage (V)"
+        },
+        data: [{
+            type: "spline",
+            xValueType: "dateTime",
+            xValueFormatString: "HH:mm:ss",
+            dataPoints: statList[1].voltageArry
+        }]
+    });
+
+    var chartAdv7 = new CanvasJS.Chart("chartContainer7", {
+        title: {
+            text: "Current Output of " + statList[1].name
+        },
+        axisX: {
+            title: "Time (s)"
+        },
+        axisY: {
+            title: "Current (A)"
+        },
+        data: [{
+            type: "spline",
+            xValueType: "dateTime",
+            xValueFormatString: "HH:mm:ss",
+            dataPoints: statList[1].currentArry
+        }]
+    });
+
+    // var chartAdv4 = new CanvasJS.Chart("chartContainer8", {
+    //     title: {
+    //         text: "Cumulative Energy of " + statList[1].name
+    //     },
+    //     axisX: {
+    //         title: "Time (s)"
+    //     },
+    //     axisY: {
+    //         title: "Energy (J)"
+    //     },
+    //     data: [{
+    //         type: "spline",
+    //         xValueType: "dateTime",
+    //         xValueFormatString: "HH:mm:ss",
+    //         dataPoints: statList[1].energyArry
+    //     }]
+    // });
+
+    var chartAdv8 = new CanvasJS.Chart("chartContainer8", {
+        title: {
+            text: "Speed of " + statList[1].name
+        },
+        axisX: {
+            title: "Time (s)"
+        },
+        axisY: {
+            title: "Speed (RPM)"
+        },
+        data: [{
+            type: "spline",
+            xValueType: "dateTime",
+            xValueFormatString: "HH:mm:ss",
+            dataPoints: statList[1].rpmArry
         }]
     });
 
     var renderAllCharts = function() {
         // Render basic chart
         chartBasic1.render();
+        chartBasic2.render();
 
         // Render advanced charts
         chartAdv1.render();
         chartAdv2.render();
         chartAdv3.render();
         chartAdv4.render();
+
+        chartAdv5.render();
+        chartAdv6.render();
+        chartAdv7.render();
+        chartAdv8.render();
     }
 
     var updateStatArry = function(statObj, statArry, xVal, yVal) {
@@ -311,7 +489,8 @@ $(document).ready( function() {
         }
     
         try {
-            var energy = statList[statID].energyArry[0]["y"] + msgObj.power;
+            var lastEntry = statList[statID].energyArry.length - 1
+            var energy = statList[statID].energyArry[lastEntry]["y"] + msgObj.power;
         } catch (TypeError) {
             var energy = msgObj.power;
         }
@@ -322,11 +501,11 @@ $(document).ready( function() {
         updateStatArry(statList[statID],'rpmArry', timestamp, msgObj.rpm);
         updateStatArry(statList[statID],'energyArry', timestamp, energy);
 
-        $('.stat #voltage').text(msgObj.voltage + " V");
-        $('.stat #current').text(msgObj.current + " A");
-        $('.stat #power').text(msgObj.power + " W");
-        $('.stat #rpm').text(msgObj.rpm + " RPM");
-        $('.stat #energy').text(energy + " J");
+        // $('.stat #voltage').text(msgObj.voltage + " V");
+        // $('.stat #current').text(msgObj.current + " A");
+        // $('.stat #power').text(msgObj.power + " W");
+        // $('.stat #rpm').text(msgObj.rpm + " RPM");
+        // $('.stat #energy').text(energy + " J");
 
         renderAllCharts();
     }
