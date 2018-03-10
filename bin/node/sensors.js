@@ -1,4 +1,4 @@
-var USE_RANDOM_DATA = true;
+var USE_RANDOM_DATA = false;
 
 var pythonScript;
 var RPMsensor;
@@ -19,7 +19,7 @@ else {
     pythonScript = "read_ina.py";
     
     // Module for reading RPM sensors
-    RPMsensor = require('./read_rpm.js'); // Read pins from hall sensors
+    RPMsensor = require('./improved_read.js'); // Read pins from hall sensors
 }
 
 // Module to execute python scripts
@@ -37,12 +37,12 @@ var sensorList = [
     {
         name: "bike",
         address: 0x40,
-        rpmSensor: new RPMsensor(11)
+        rpmSensor: new RPMsensor(37)
     },
     {
         name: "handcrank",
         address: 0x41,
-        rpmSensor: new RPMsensor(12)
+        rpmSensor: new RPMsensor(38)
     }
 ];
 
@@ -53,7 +53,7 @@ function readSensor(sensorObj, socketObj) {
         if (err) return err;
 	// console.log("calling py with address " + sensorObj.address);
         statPacket = data[0];
-        statPacket.rpm = sensorObj.rpmSensor.getRPM();
+        statPacket.rpm = sensorObj.rpmSensor.rpm;
         statPacket.name = sensorObj.name;
         socketObj.emit('stats', statPacket);
         return statPacket;
