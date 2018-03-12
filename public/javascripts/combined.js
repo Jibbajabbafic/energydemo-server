@@ -1,16 +1,8 @@
 // ------------------------------ General Functions ------------------------------
 
-var MAX_DATAPOINTS = 50;
+var MAX_DATAPOINTS_BASIC = 1;
+var MAX_DATAPOINTS_ADV = 50;
 var energyTemp = 0;
-
-// Array to hold our data
-// var electricStats = {
-//     voltageArry: [],
-//     currentArry: [],
-//     powerArry: [],
-//     energyArry: [],
-//     rpmArry: []
-// };
 
 var statList = [
     {
@@ -45,22 +37,12 @@ function searchList(list, property, value) {
     return -1;
 }
 
-// function makeEntry(msgObj, statsObj) {
-//     console.log("Making entry!");
-//     return -1 + statList.push({
-//         name: msgObj.name, 
-//         voltageArry: [],
-//         currentArry: [],
-//         powerArry: [],
-//         energyArry: [],
-//         rpmArry: []
-//     })
-// };    
-
+// Function to specified tab
 function changeTab(tabID) {
 	// Hide all tabs
     $(".tab").hide();
     $("button.nav").prop('disabled', false);
+    
     // Show specified tab with id = tabID
     $("button.nav#" + tabID).prop('disabled', true);
 	$(".tab#" + tabID).show();
@@ -112,7 +94,7 @@ $(document).ready( function() {
 
     // ------------------------------ CanvasJS stuff ------------------------------
 
-    // ----- Basic view charts -----
+    // --------------- Basic view charts ---------------
     var basicChartPowerOptions1 = {
         title: {
             text: "Power Output of " + statList[0].name
@@ -168,7 +150,7 @@ $(document).ready( function() {
             type: "bar",
             xValueType: "dateTime",
             xValueFormatString: "HH:mm:ss.fff",
-            dataPoints: statList[0].powerArry
+            dataPoints: statList[0].powerArryBasic
         }]
     };
 
@@ -227,14 +209,14 @@ $(document).ready( function() {
             type: "bar",
             xValueType: "dateTime",
             xValueFormatString: "HH:mm:ss.fff",
-            dataPoints: statList[1].powerArry
+            dataPoints: statList[1].powerArryBasic
         }]
     };
 
     var chartBasic1 = new CanvasJS.Chart("chartContainerPower1", basicChartPowerOptions1);
     var chartBasic2 = new CanvasJS.Chart("chartContainerPower2", basicChartPowerOptions2);
 
-    // ----- Advanced view charts -----
+    // --------------- Advanced view charts ---------------
 
     var chartAdv1 = new CanvasJS.Chart("chartContainer1", {
         title: {
@@ -418,6 +400,7 @@ $(document).ready( function() {
         }]
     });
 
+    // Function to render all charts on the page easily
     var renderAllCharts = function() {
         // Render basic chart
         chartBasic1.render();
@@ -435,7 +418,8 @@ $(document).ready( function() {
         chartAdv8.render();
     }
 
-    var updateStatArry = function(statObj, statArry, xVal, yVal) {
+    // Function to update an array of stats and ensure it doesn't go over the datapoint limit
+    var updateStatArry = function(statObj, statArry, xVal, yVal, max_datapoints) {
         if (isNaN(yVal)) {
             console.log("Arry: " + statArry);
             console.log("xVal: " + xVal);
@@ -450,34 +434,12 @@ $(document).ready( function() {
             });
         }
 
-        if (statObj[statArry].length > MAX_DATAPOINTS) {
+        if (statObj[statArry].length > max_datapoints) {
             statObj[statArry].shift();
         };
     };
-
-    // updateHolders = function(msgObj, statsObj) {
-    //     var timestamp = Date.parse(msgObj.time);
-    //     // console.log('Timestamp: ' + timestamp);
-    //     energyTemp += msgObj.power;
-
-    //     updateStatArry(statsObj, 'voltageArry', timestamp, msgObj.voltage);
-    //     updateStatArry(statsObj,'currentArry', timestamp, msgObj.current);
-    //     updateStatArry(statsObj,'powerArry', timestamp, msgObj.power);
-    //     updateStatArry(statsObj,'rpmArry', timestamp, msgObj.rpm);
-    //     updateStatArry(statsObj,'energyArry', timestamp, energyTemp);
     
-    //     $('.stat #voltage').text(msgObj.voltage + " V");
-    //     $('.stat #current').text(msgObj.current + " A");
-    //     $('.stat #power').text(msgObj.power + " W");
-    //     $('.stat #rpm').text(msgObj.rpm + " RPM");
-    //     $('.stat #energy').text(energyTemp + " J");
-    //     // $(rpm0Holder).text(msgObj.rpm0);
-    //     // $(rpm1Holder).text(msgObj.rpm1);
-    //     // $(rpm2Holder).text(msgObj.rpm2);
-    
-    //     renderAllCharts();
-    // };
-    
+    // Function to update stats with data, searches for entry with the same name
     updateStats = function(msgObj) {
         var timestamp = Date.parse(msgObj.time);
     
@@ -485,7 +447,6 @@ $(document).ready( function() {
     
         if (statID === -1) {
             console.log("Error: that entry does not exist!");
-            // statID = makeEntry(msgObj, statList);
         }
     
         try {
@@ -495,11 +456,15 @@ $(document).ready( function() {
             var energy = msgObj.power;
         }
     
-        updateStatArry(statList[statID], 'voltageArry', timestamp, msgObj.voltage);
-        updateStatArry(statList[statID],'currentArry', timestamp, msgObj.current);
-        updateStatArry(statList[statID],'powerArry', timestamp, msgObj.power);
-        updateStatArry(statList[statID],'rpmArry', timestamp, msgObj.rpm);
-        updateStatArry(statList[statID],'energyArry', timestamp, energy);
+        // Update advanced chart data arrays
+        updateStatArry(statList[statID], 'voltageArry', timestamp, msgObj.voltage, MAX_DATAPOINTS_ADV);
+        updateStatArry(statList[statID],'currentArry', timestamp, msgObj.current, MAX_DATAPOINTS_ADV);
+        updateStatArry(statList[statID],'powerArry', timestamp, msgObj.power, MAX_DATAPOINTS_ADV);
+        updateStatArry(statList[statID],'rpmArry', timestamp, msgObj.rpm, MAX_DATAPOINTS_ADV);
+        updateStatArry(statList[statID],'energyArry', timestamp, energy, MAX_DATAPOINTS_ADV);
+
+        // Update basic chart data arrays
+        updateStatArry(statList[statID],'powerArryBasic', timestamp, msgObj.power, MAX_DATAPOINTS_BASIC);
 
         // $('.stat #voltage').text(msgObj.voltage + " V");
         // $('.stat #current').text(msgObj.current + " A");
