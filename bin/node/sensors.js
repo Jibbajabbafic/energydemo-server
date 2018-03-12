@@ -1,4 +1,4 @@
-var USE_RANDOM_DATA = false;
+var USE_RANDOM_DATA = true;
 
 var pythonScript;
 var RPMsensor;
@@ -19,7 +19,7 @@ else {
     pythonScript = "read_ina.py";
     
     // Module for reading RPM sensors
-    RPMsensor = require('./improved_read.js'); // Read pins from hall sensors
+    RPMsensor = require('./read_rpm.js'); // Read pins from hall sensors
 }
 
 // Module to execute python scripts
@@ -46,22 +46,27 @@ var sensorList = [
     }
 ];
 
+// Function to read collection of sensors and send a packet of data
 function readSensor(sensorObj, socketObj) {
     statPacket = [];
-    // console.log("calling py with address " + sensorObj.address);
+
     PythonShell.run(pythonScript, {args: sensorObj.address}, function (err, data) {
+        // Check if script returned an error
         if (err) return err;
-	// console.log("calling py with address " + sensorObj.address);
+
+        // Put together the packet of data
         statPacket = data[0];
-        statPacket.rpm = sensorObj.rpmSensor.rpm;
+        statPacket.rpm = sensorObj.rpmSensor.getRPM();
         statPacket.name = sensorObj.name;
+
+        // Emit the data to all clients
         socketObj.emit('stats', statPacket);
-        return statPacket;
     });
 }
 
 module.exports.readAll = function (socketObj) {
     for (var i = 0; i < sensorList.length; i++) {
+        // Loop through all sensors in sensor list and emit stats for them
         readSensor(sensorList[i], socketObj);
     };
 };
