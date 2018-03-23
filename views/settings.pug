@@ -1,0 +1,20 @@
+extends layout
+
+block banner
+    .banner
+        img(src='/images/lightbulb.png').bannerBox#lightbulb
+        .bannerBox
+            h1= title
+            p This is where various settings for the energy demonstration can be altered.
+            // Button to change to basic view
+            a(href='/')
+                button.nav#basic Basic view
+            
+            // Button to change to advanced view
+            a(href='/')
+                button.nav#advanced Advanced view
+
+            // Button to toggle readings
+            button#toggleRead Toggle Readings 
+
+block content

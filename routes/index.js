@@ -10,6 +10,10 @@ router.get('/', function(req, res, next) {
   res.render('combined', { title: 'Energy Demonstration System', page: 'combined'});
 });
 
+router.get('/settings', function(req, res, next) {
+  res.render('settings', { title: 'Energy Demonstration System', page: 'settings'});
+});
+
 /* GET advanced view. */
 // router.get('/advanced', function(req, res, next) {
 //   res.render('advanced', { title: 'Energy Demonstration System - Advanced View', page: 'advanced'});
