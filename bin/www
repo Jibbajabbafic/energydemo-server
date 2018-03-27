@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
 /**
- * Variables to change functionality easily
+ * Time between samples in seconds (will lag a lot if set too low!)
  */
-
-// Time between samples in seconds (will lag a lot if set too low!)
 var SAMPLE_TIME = 1;
 
-// When true, stops readings if no clients connected
+/**
+ * When true, stops readings if no clients connected
+ */
 var ONLY_READ_WHEN_CLIENTS_CONNECTED = false;
 
 /**
@@ -18,11 +18,14 @@ var app = require('../app');
 var debug = require('debug')('energydemo-server:server');
 var http = require('http');
 
-// Module with all sensor information
-var sensors = require('./node/sensors.js')
+/**
+ *  Module with all sensor information
+ */
+var sensors = require('./node/sensors.js');
 
-
-// Function to be called when reading sensors
+/**
+ * Function to be called when reading sensors
+ */
 function readSensors() {
     // Read all sensors and emit using io object
     // console.log("Calling readSensors()");
