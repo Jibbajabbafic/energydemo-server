@@ -1,19 +1,36 @@
 extends layout
 
-block content
+block banner
     .banner
-        img(src='/images/lightbulb.png').bannerBox#lightbulb    
+        img(src='/images/lightbulb.png').bannerBox#lightbulb
         .bannerBox
             h1= title
-            p Welcome to #{title}
-            // Link to advanced view
-            a(href='/advanced')
-                button.btn Advanced view
-            br
-            button.btn#toggleRead Toggle Readings
-    //- .statsHolder
-    //-     .stat Power: 
-    //-         #powerHolder
-    .chartHolder
-        .chart#powerChart
-    //- .chart#barChart2
+            //- p Welcome to #{title}
+            p This website is for the energy demonstration system running on a Raspberry Pi.
+            // Button to change to basic view
+            button.nav#basic Basic view
+            
+            // Button to change to advanced view
+            button.nav#advanced Advanced view
+
+            // Button to toggle readings
+            button#toggleRead Toggle Readings    
+
+            a(href='/settings')
+                button#settings Settings
+block content
+    .tab#basic
+            .chartHolder#basic
+                .chartBasic#chartContainerPower1
+                .chartBasic#chartContainerPower2
+    .tab#advanced
+            .chartHolder#advanced
+                .chartAdv#chartContainer1
+                .chartAdv#chartContainer2
+                .chartAdv#chartContainer3
+                .chartAdv#chartContainer4        
+            .chartHolder#advanced
+                .chartAdv#chartContainer5
+                .chartAdv#chartContainer6
+                .chartAdv#chartContainer7
+                .chartAdv#chartContainer8

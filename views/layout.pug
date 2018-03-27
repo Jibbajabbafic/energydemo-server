@@ -13,14 +13,11 @@ html
 
         // Load canvasJS
         script(src='/javascripts/jquery.canvasjs.min.js')
-
-        // Load global javascript
-        // script(src='javascripts/global.js')
-        
-        block head
         
         // Load local javascript
         script(src='/javascripts/'+ page + '.js')
+
+        block head
 
     body
         block banner
