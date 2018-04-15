@@ -9,6 +9,11 @@ a {
     color: #00B7FF;
 }
 
+.loginError {
+    background-color: red;
+    color: white;
+}
+
 .tab {
     display: none;
     min-height: 5em;

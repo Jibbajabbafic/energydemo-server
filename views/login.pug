@@ -1,0 +1,14 @@
+extends layout
+
+block content
+    a(href='/') Home
+
+    form(action="/login", method="post")
+        label(for="username") Username
+        input(type="text", name="username", required)
+        label(for="password") Password
+        input(type="password", name="password", required)
+        input(type="submit", value="Login")
+
+    if message
+        .loginError= message

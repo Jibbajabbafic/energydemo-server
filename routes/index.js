@@ -16,9 +16,9 @@ router.get('/', function(req, res, next) {
  * =================================
  */
 // get login page
-// router.get('/login', function(req, res, next){
-//    res.render('login', { message: req.flash('loginMessage') });
-// });
+router.get('/login', function(req, res, next){
+   res.render('login', { message: req.flash('loginMessage') });
+});
 
 // process login requests
 // router.post('/login', do passport stuff here);

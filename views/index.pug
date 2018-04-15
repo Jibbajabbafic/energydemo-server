@@ -7,17 +7,27 @@ block banner
             h1= title
             //- p Welcome to #{title}
             p This website is for the energy demonstration system running on a Raspberry Pi.
+            p= authorised
+            
             // Button to change to basic view
             button.nav#basic Basic view
             
             // Button to change to advanced view
             button.nav#advanced Advanced view
 
-            // Button to toggle readings
-            button#toggleRead Toggle Readings    
+            //- // Button to toggle readings
+            //- button#toggleRead Toggle Readings
+
+            if authorised
+                a(href='/logout')
+                    button#logout Logout
+            else
+                a(href='/login')
+                    button#login Login
 
             a(href='/settings')
                 button#settings Settings
+             
 block content
     .tab#basic
             .chartHolder#basic
