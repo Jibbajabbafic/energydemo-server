@@ -24,6 +24,11 @@ var http = require('http');
 var sensors = require('./node/sensors.js');
 
 /**
+ * Relay module to control raspberry pi pins
+ */
+// var Relay = require('./node/relay.js');
+
+/**
  * Function to be called when reading sensors
  */
 function readSensors() {
@@ -54,6 +59,12 @@ var io = require('socket.io').listen(server);
 var readSensorFlag = 0;
 var clientCount = 0;
 
+var relayState = {
+    lights: null,
+    kettle: null,
+    charger: null
+}
+
 io.on('connection', function (client) {
     // Keep track of connected clients
     console.log('Client connected');
@@ -62,6 +73,9 @@ io.on('connection', function (client) {
     
     // Tell the user the status of the sensor script
     io.emit('toggleStatus', readSensorFlag);
+
+    // Tell the user the status of the relays
+    io.emit('relayStatus', relayState);
 
     client.on('disconnect', function () {
         console.log('Client disconnected');
@@ -93,6 +107,18 @@ io.on('connection', function (client) {
         }
         io.emit('toggleStatus', readSensorFlag);
     });
+
+    client.on('relaySwitch', function (data) {
+        console.log(data);
+
+        if (relayState[data.output] == data.input)
+            relayState[data.output] = null;
+        else
+        relayState[data.output] = data.input;
+
+        
+        io.emit('relayStatus', relayState);
+    });    
 });
 
 /**
