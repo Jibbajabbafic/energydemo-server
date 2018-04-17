@@ -1,14 +1,28 @@
 extends layout
 
+block banner
+    .banner
+        img(src='/images/lightbulb.png').bannerBox#lightbulb
+        .bannerBox
+            h1= title
+
+            a(href='/')
+                button.nav#home Home
+
+            form(action="/login", method="post")
+                label(for="username") Username
+                br
+                input(type="text", name="username", required)
+                br
+                label(for="password") Password
+                br
+                input(type="password", name="password", required)
+                if message
+                    .loginError= message
+                input(type="submit", value="Login")
+
 block content
-    a(href='/') Home
+    .content
 
-    form(action="/login", method="post")
-        label(for="username") Username
-        input(type="text", name="username", required)
-        label(for="password") Password
-        input(type="password", name="password", required)
-        input(type="submit", value="Login")
 
-    if message
-        .loginError= message
+

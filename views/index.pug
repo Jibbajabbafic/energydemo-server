@@ -7,40 +7,73 @@ block banner
             h1= title
             //- p Welcome to #{title}
             p This website is for the energy demonstration system running on a Raspberry Pi.
-            p= authorised
             
-            // Button to change to basic view
-            button.nav#basic Basic view
-            
-            // Button to change to advanced view
-            button.nav#advanced Advanced view
+            nav
+                // Button to change to basic view
+                button.nav#basic Basic view
+                
+                // Button to change to advanced view
+                button.nav#advanced Advanced view
 
-            //- // Button to toggle readings
-            //- button#toggleRead Toggle Readings
+                //- // Button to toggle readings
+                //- button#toggleRead Toggle Readings
 
-            if authorised
-                a(href='/logout')
-                    button#logout Logout
-            else
-                a(href='/login')
-                    button#login Login
+                a(href='/settings')
+                    button.nav#settings Settings
 
-            a(href='/settings')
-                button#settings Settings
+                if authorised
+                    a(href='/logout')
+                        button.nav#logout Logout
+                else
+                    a(href='/login')
+                        button.nav#login Login
              
 block content
-    .tab#basic
-            .chartHolder#basic
-                .chartBasic#chartContainerPower1
-                .chartBasic#chartContainerPower2
-    .tab#advanced
-            .chartHolder#advanced
-                .chartAdv#chartContainer1
-                .chartAdv#chartContainer2
-                .chartAdv#chartContainer3
-                .chartAdv#chartContainer4        
-            .chartHolder#advanced
-                .chartAdv#chartContainer5
-                .chartAdv#chartContainer6
-                .chartAdv#chartContainer7
-                .chartAdv#chartContainer8
+    .content
+        .temp-box
+            h2 Temperatures
+            .temp-row
+                .column
+                    h3 Target:  
+                    h3 Ambient:
+                    h3 Kettle:
+                    h3 Estimated time:
+                .column
+                    h3
+                        span#target
+                        span &degC
+                    h3
+                        span#ambient
+                        span &degC
+                    h3
+                        span#kettle
+                        span &degC         
+                    #est-time
+
+            //- console.log("===================================================");
+            //- console.log("Probes: ");
+            //- console.log("Ambient = " + probe_ambient);
+            //- console.log("Kettle = " + probe_kettle);
+            //- console.log("Mass of Water: " + mass + " kg");
+            //- console.log("Target Temperature: " + TARGET_TEMP + " degrees C");            
+            //- console.log("Ambient Temperature: " + temp_ambient + " degrees C");
+            //- console.log("Kettle Temperature: " + temp_kettle + " degrees C");                
+            //- console.log("Power Input: " + power + " Watts");
+            //- console.log("Estimated time is: " + time + " seconds, " + timeStr);
+            //- console.log("===================================================");                     
+        .graphs
+            .tab#basic
+                    .chartHolder#basic
+                        .chartBasic#chartContainerPower1
+                        .chartBasic#chartContainerPower2
+            .tab#advanced
+                    .chartHolder#advanced
+                        .chartAdv#chartContainer1
+                        .chartAdv#chartContainer2
+                        .chartAdv#chartContainer3
+                        .chartAdv#chartContainer4        
+                    .chartHolder#advanced
+                        .chartAdv#chartContainer5
+                        .chartAdv#chartContainer6
+                        .chartAdv#chartContainer7
+                        .chartAdv#chartContainer8

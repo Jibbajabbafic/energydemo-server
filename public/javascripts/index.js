@@ -2,7 +2,6 @@
 
 var MAX_DATAPOINTS_BASIC = 1;
 var MAX_DATAPOINTS_ADV = 50;
-var energyTemp = 0;
 
 var statList = [
     {
@@ -451,7 +450,7 @@ $(document).ready( function() {
     
         try {
             var lastEntry = statList[statID].energyArry.length - 1
-            var energy = statList[statID].energyArry[lastEntry]["y"] + msgObj.power;
+            var energy = statList[statID].energyArry[lastEntry].y + msgObj.power;
         } catch (TypeError) {
             var energy = msgObj.power;
         }

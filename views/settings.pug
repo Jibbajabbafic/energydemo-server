@@ -5,19 +5,106 @@ block banner
         img(src='/images/lightbulb.png').bannerBox#lightbulb
         .bannerBox
             h1= title
-            p This is where various settings for the energy demonstration can be altered.
-            // Button to change to basic view
-            a(href='/')
-                button.nav#basic Basic view
+            //- p This is where various settings for the energy demonstration can be altered.
             
-            // Button to change to advanced view
+            // Button to navigate back to homepage
             a(href='/')
-                button.nav#advanced Advanced view
-
-            // Button to toggle readings
-            button#toggleRead Toggle Readings 
+                button.nav#home Home
             
             a(href='/logout')
-                button#logout Logout
+                button.nav#logout Logout
 
 block content
+    .content
+        .settings
+            .variableSettings
+                h2 Settings
+                .icon
+                    i.fas.fa-sliders-h
+                // Button to toggle readings
+                button#toggleRead Toggle Readings 
+
+            .relaySettings
+                .output
+                    h2 Lights
+                    .iconBig
+                        i.far.fa-lightbulb
+                    .row
+                        .column
+                            .lineDiagHolderLeft
+                                .left
+                            .iconLine.bike.lights
+
+                            button.relay.bike.lights#bike2lights
+                                span.btn-relay-label Bike to Bulb
+                            
+                            .icon
+                                i.fas.fa-bicycle
+                            h3 Bike
+                        .column
+                            .lineDiagHolderRight
+                                .right
+                            .iconLine.handcrank.lights
+                            
+                            button.relay.handcrank.lights#handrcrank2lights
+                                span.btn-relay-label Handcrank to Bulb
+                            
+                            .icon
+                                i.fas.fa-circle-notch
+                            h3 Handcrank
+
+                .output
+                    h2 Kettle
+                    .iconBig
+                        i.fas.fa-coffee
+                    .row
+                        .column
+                            .lineDiagHolderLeft
+                                .left
+                            .iconLine
+                            
+                            button.relay.bike.kettle#bike2kettle
+                                span.btn-relay-label Bike to Kettle
+                            
+                            .icon
+                                i.fas.fa-bicycle
+                            h3 Bike
+                        .column
+                            .lineDiagHolderRight
+                                .right
+                            .iconLine
+                            
+                            button.relay.handcrank.kettle#handrcrank2kettle
+                                span.btn-relay-label Handcrank to Kettle
+                            
+                            .icon
+                                i.fas.fa-circle-notch
+                            h3 Handcrank
+
+                .output
+                    h2 Charger
+                    .iconBig
+                        i.fas.fa-plug
+                    .row
+                        .column
+                            .lineDiagHolderLeft
+                                .left
+                            .iconLine
+                            
+                            button.relay.bike.charger#bike2charger
+                                span.btn-relay-label Bike to Charger
+                            
+                            .icon
+                                i.fas.fa-bicycle
+                            h3 Bike
+                        .column
+                            .lineDiagHolderRight
+                                .right
+                            .iconLine
+                            
+                            button.relay.handcrank.charger#handrcrank2charger
+                                span.btn-relay-label Handcrank to Charger
+                            
+                            .icon
+                                i.fas.fa-circle-notch
+                            h3 Handcrank

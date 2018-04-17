@@ -26,7 +26,17 @@ var sensors = require('./node/sensors.js');
 /**
  * Relay module to control raspberry pi pins
  */
-// var Relay = require('./node/relay.js');
+const Relay = require('./node/relay.js');
+
+var relay = new Relay();
+
+/**
+ * Temperature module to read temperature sensors
+ */
+
+// const Temperature = require('./node/temperature.js');
+
+var temperature = new Temperature();
 
 /**
  * Function to be called when reading sensors
@@ -111,12 +121,18 @@ io.on('connection', function (client) {
     client.on('relaySwitch', function (data) {
         console.log(data);
 
-        if (relayState[data.output] == data.input)
-            relayState[data.output] = null;
-        else
-        relayState[data.output] = data.input;
 
+        if (relayState[data.output] == data.input) {
+            relayState[data.output] = null;
+        }
+        else {
+            relayState[data.output] = data.input;
+            // relay.connect(data.input, data.output);
+        }
         
+        relay.disableAll();
+        relay.setAll(relayState);
+
         io.emit('relayStatus', relayState);
     });    
 });

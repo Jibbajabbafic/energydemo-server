@@ -9,15 +9,21 @@ a {
     color: #00B7FF;
 }
 
-.loginError {
-    background-color: red;
-    color: white;
-}
+/* nav {
+
+} */
 
 .tab {
     display: none;
     min-height: 5em;
     margin: auto;
+}
+
+img#lightbulb {
+    padding-top: 2em;
+    padding-right: 2em;
+    height: auto;
+    max-width: 5em;
 }
 
 .chartHolder {
@@ -54,13 +60,18 @@ a {
     margin: 0 auto;
 }
 
-.banner {
+.banner, .content {
     /* min-width: 80%; */
     min-height: 5em;
-    margin-left: 10em;
-    margin-right: 10em;
-    padding: 2em 10em;
+    margin-left: 5em;
+    margin-right: 5em;
+    padding: 0em 10em;
     background-color: white;
+}
+
+.content {
+    padding: 0em 5em;
+    padding-bottom: 2em;
 }
 
 .bannerBox {
@@ -70,9 +81,34 @@ a {
     vertical-align: top;
 }
 
-button {
-    width: auto;
-    min-width: 10em;
+/* =============== Temperature display specific CSS =============== */
+
+.temp-box {
+    position: relative;
+    right: 5em;
+    /* max-width: 25%; */
+    /* min-width: 20em; */
+    width: 18em;
+    /* background: #b2dbeb; */
+    padding: 1em;
+}
+
+.temp-row {
+    display: flex;
+    /* align-items: center;
+    justify-content: center; */
+    /* max-width: 25%; */
+}
+
+/* =============== Login page specific CSS =============== */
+
+label {
+    font-weight: bold;
+}
+
+button, input[type=submit] {
+    /* width: auto; */
+    /* min-width: 10em; */
     margin: 0.2em;
     padding: 0.5em 1em;
     border-radius: 1em;
@@ -81,13 +117,124 @@ button {
     border-color: #315b79;
 }
 
-#pythonMessage {
-    height: 1.5em;
+button.nav, input[type=submit] {
+    min-width: 10em;
+    /* margin: 0.2em; */
+    /* padding: 0.5em 1em;     */
 }
 
-img#lightbulb {
-    padding-top: 2em;
-    padding-right: 2em;
-    height: auto;
-    max-width: 5em;
+.loginError {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border-radius: 1em;
+    text-align: center;
+}
+
+/* =============== Settings page specific CSS =============== */
+
+.settings {
+    display: flex;
+}
+
+.variableSettings {
+    flex: 15%;
+}
+
+.relaySettings {
+    display: flex;
+    flex: 80%;
+    justify-content: space-around;
+    /* justify-content: safe; */
+}
+
+.output {
+    flex: 33%;
+    text-align: center;
+    /* background: cadetblue; */
+    min-width: 17em;
+    max-width: 20em;
+    margin: 0em 1em;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.column {
+    flex: 50%;
+    /* background: coral; */
+}
+
+.icon {
+    font-size: 3em;
+}
+
+.iconBig {
+    font-size: 5em;
+}
+
+.iconLine {
+    height: 3em;
+    width: 1em;
+    margin: auto;
+    background: black;
+    z-index: 1;
+    position: relative;
+    top: 1.2em;
+    border-radius: 1em;
+}
+
+.lineDiagHolderLeft, .lineDiagHolderRight {
+    height: 2em;
+    width: 50%;
+}
+
+.lineDiagHolderLeft {
+    margin-left: 50%;
+}
+
+.lineDiagHolderRight {
+    margin-right: 50%;
+}
+
+.left, .right {
+    height: 1em;
+    width: 100%;
+    background: black;
+    /* transform: rotate(-45deg); */
+    /* transform-origin: 0% 100%; */
+    border-radius: 1em;
+    position: relative;
+    top: 3.2em;    
+}
+
+.left {
+    transform: rotate(-45deg);
+    transform-origin: 0% 100%;
+}
+
+.right {
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+}
+
+button.relay {
+    /* display: flex; */
+    height: 4em;
+    width: 4em;
+    border-radius: 50%;
+    margin: 1em auto;
+    display:block;
+    z-index: 2;
+    position: relative;
+}
+
+.btn-relay-label {
+    font-size: 0;
+    height: 1px;
+    overflow: hidden;
+    display: block;    
 }
