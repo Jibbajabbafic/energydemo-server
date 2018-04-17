@@ -1,21 +1,75 @@
-var TARGET_TEMP = 100;
-var mass = 300;
-var heat_capacity = 4190;
-var sensor = require('ds18x20');
+// const ds18 = require('ds18x20');
 
-var power = 100;
+const Probe = {
+    kettle: "kettle_probe_id",
+    ambient: "ambient_probe_id"
+};
 
-sensor.isDriverLoaded(function (err, isLoaded) {
-    console.log("Sensor load status: " + isLoaded);
-});
+const readProbes = (callback) => {
+    // ds18.getAll( (err, tempObj) => {
+    //     if(err) callback(err);
+        
+    //     let temp_kettle = tempObj[Probe.kettle];
+    //     let temp_ambient = tempObj[Probe.ambient];
 
-sensor.list(function (err, listOfDeviceIds) {
-    console.log(listOfDeviceIds);
-});
+    //     if(!temp_kettle) callback(new Error("Can't read kettle probe!"));
+    //     if(!temp_ambient) callback(new Error("Can't read ambient probe!"));
 
-sensor.get('28-00000574c791', function (err, temp) {
-    console.log(temp);
-    var energy = heat_capacity*mass*(TARGET_TEMP - temp)
-    var time = energy / power;
-    console.log("Estimated time is: " + time);
-});
+    //     callback(null, {kettle: temp_kettle, ambient: temp_ambient});
+    // })
+    
+    // sensor.get([Probe.kettle, Probe.ambient], function (err, tempList) {
+    //     let temp_kettle = tempList[0];
+    //     let temp_ambient = tempList[1];
+
+    //     if(!temp_kettle) callback(new Error("Can't read kettle probe!"));
+    //     if(!temp_ambient) callback(new Error("Can't read ambient probe!"));
+
+    //     callback(null, {kettle: temp_kettle, ambient: temp_ambient});
+    // });
+}
+
+function fancyTimeFormat(time) {   
+    // Hours, minutes and seconds
+    var hrs = ~~(time / 3600);
+    var mins = ~~((time % 3600) / 60);
+    var secs = time % 60;
+
+    // Output like "1:01" or "4:03:59" or "123:03:59"
+    var ret = "";
+
+    if (hrs > 0) {
+        ret += "" + hrs + " hrs " + (mins < 10 ? "0" : "");
+    }
+
+    ret += "" + mins + " mins " + (secs < 10 ? "0" : "");
+    ret += "" + secs + "s ";
+    return ret;
+}
+
+function Temperature(SAMPLE_TIME) {
+    this.SAMPLE_TIME = SAMPLE_TIME;
+
+    this.target_temp = 100;
+    this.mass = 0.3;
+    this.heat_capacity = 4190;
+
+    // ds18.isDriverLoaded(function (err, isLoaded) {
+    //     if (!isLoaded)  console.log("WARNING: Temperature sensor driver not loaded!");
+    //     // console.log("Driver loaded: " + isLoaded);
+    // });
+
+    console.log("Temperature module loaded");
+}
+
+Temperature.prototype.readAll = (callback) => {
+    readProbes( (err, temps) => {
+        if(err) callback(err);
+            
+        let energy = heat_capacity*mass*(target_temp - temps.kettle);
+
+        callback(null, temps, energy);
+    });
+};
+
+module.exports = Temperature;
