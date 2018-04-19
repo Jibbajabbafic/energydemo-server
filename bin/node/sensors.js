@@ -49,12 +49,12 @@ var sensorList = [
 ];
 
 // Function to read collection of sensors and send a packet of data
-function readSensor(sensorObj, socketObj) {
-    statPacket = [];
+function readSensor(sensorObj, callback) {
+    let statPacket = [];
 
     PythonShell.run(pythonScript, {args: [sensorObj.address, sensorObj.shunt_ohms] }, function (err, data) {
         // Check if script returned an error
-        if (err) return err;
+        if (err) callback(err);
 
         // Put together the packet of data
         statPacket = data[0];
@@ -62,13 +62,14 @@ function readSensor(sensorObj, socketObj) {
         statPacket.name = sensorObj.name;
 
         // Emit the data to all clients
-        socketObj.emit('stats', statPacket);
+        // socketObj.emit('stats', statPacket);
+        callback(null, statPacket);
     });
 }
 
-module.exports.readAll = function (socketObj) {
+module.exports.readAll = function (callback) {
     for (var i = 0; i < sensorList.length; i++) {
         // Loop through all sensors in sensor list and emit stats for them
-        readSensor(sensorList[i], socketObj);
+        readSensor(sensorList[i], callback);
     };
 };
