@@ -34,7 +34,7 @@ var relay = new Relay();
  * Temperature module to read temperature sensors
  */
 
-// const Temperature = require('./node/temperature.js');
+const Temperature = require('./node/temperature.js');
 
 var temperature = new Temperature();
 
@@ -45,7 +45,11 @@ function readSensors() {
     // Read all sensors and emit using io object
     // console.log("Calling readSensors()");
     sensors.readAll(io);
-}
+    temperature.readAll( (err, temps, energy) => {
+        console.log("Temps: ", temps);
+        console.log("Energy: ", energy);
+    });
+};
 
 /**
  * Get port from environment and store in Express.

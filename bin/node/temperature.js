@@ -1,11 +1,11 @@
-// const ds18 = require('ds18x20');
+const ds18 = require('ds18x20');
 
 const Probe = {
-    kettle: "kettle_probe_id",
-    ambient: "ambient_probe_id"
+    kettle: "28-0517607924ff",
+    ambient: "28-031760640fff"
 };
 
-const readProbes = (callback) => {
+var readProbes = (callback) => {
     // ds18.getAll( (err, tempObj) => {
     //     if(err) callback(err);
         
@@ -18,15 +18,15 @@ const readProbes = (callback) => {
     //     callback(null, {kettle: temp_kettle, ambient: temp_ambient});
     // })
     
-    // sensor.get([Probe.kettle, Probe.ambient], function (err, tempList) {
-    //     let temp_kettle = tempList[0];
-    //     let temp_ambient = tempList[1];
+    ds18.get([Probe.kettle, Probe.ambient], function (err, tempList) {
+        let temp_kettle = tempList[0];
+        let temp_ambient = tempList[1];
 
-    //     if(!temp_kettle) callback(new Error("Can't read kettle probe!"));
-    //     if(!temp_ambient) callback(new Error("Can't read ambient probe!"));
+        if(!temp_kettle) callback(new Error("Can't read kettle probe!"));
+        if(!temp_ambient) callback(new Error("Can't read ambient probe!"));
 
-    //     callback(null, {kettle: temp_kettle, ambient: temp_ambient});
-    // });
+        callback(null, {kettle: temp_kettle, ambient: temp_ambient});
+    });
 }
 
 function fancyTimeFormat(time) {   
@@ -47,28 +47,35 @@ function fancyTimeFormat(time) {
     return ret;
 }
 
-function Temperature(SAMPLE_TIME) {
-    this.SAMPLE_TIME = SAMPLE_TIME;
+var Temperature = function(SAMPLE_TIME) {
+//     this.SAMPLE_TIME = SAMPLE_TIME;
 
     this.target_temp = 100;
     this.mass = 0.3;
     this.heat_capacity = 4190;
 
-    // ds18.isDriverLoaded(function (err, isLoaded) {
-    //     if (!isLoaded)  console.log("WARNING: Temperature sensor driver not loaded!");
-    //     // console.log("Driver loaded: " + isLoaded);
-    // });
+    ds18.isDriverLoaded(function (err, isLoaded) {
+        if (!isLoaded)  console.log("WARNING: Temperature sensor driver not loaded!");
+//        console.log("Driver loaded: " + isLoaded);
+    });
 
     console.log("Temperature module loaded");
 }
 
-Temperature.prototype.readAll = (callback) => {
-    readProbes( (err, temps) => {
-        if(err) callback(err);
-            
-        let energy = heat_capacity*mass*(target_temp - temps.kettle);
+Temperature.prototype.readAll = function (callback) {
 
-        callback(null, temps, energy);
+    ds18.get([Probe.kettle, Probe.ambient], (err, tempList) => {
+	if (err) callback(err);
+
+        let temp_kettle = tempList[0];
+        let temp_ambient = tempList[1];
+        
+        if(!temp_kettle) callback(new Error("Can't read kettle probe!"));
+        if(!temp_ambient) callback(new Error("Can't read ambient probe!"));
+
+        let energy = this.heat_capacity*this.mass*(this.target_temp - temp_kettle);
+
+        callback(null, {kettle: temp_kettle, ambient: temp_ambient}, energy);
     });
 };
 

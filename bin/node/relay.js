@@ -1,17 +1,17 @@
-// var rpio = require('rpio');
+var rpio = require('rpio');
 
 const Pins = {
     lights: {
-        bike: 1,
-        handcrank: 2
+        bike: 21,
+        handcrank: 22
     },
     kettle: {
-        bike: 3,
-        handcrank: 4
+        bike: 23,
+        handcrank: 24
     },
     charger: {
-        bike: 5,
-        handcrank: 6
+        bike: 11,
+        handcrank: 12
     }
 };
 
@@ -31,7 +31,7 @@ Pins.iterate = (callback) => {
 const initAll = () => {
     // initialise all pins defined in Pins to be outputs and set to low
     Pins.iterate( (input, output, pin) => {
-        // rpio.open(pin, rpio.OUTPUT, rpio.LOW);
+        rpio.open(pin, rpio.OUTPUT, rpio.LOW);
         // console.log("Init " + input + " to " + output + " connection on pin: " + pin);
     });
 };
@@ -44,7 +44,7 @@ function Relay() {
         // mock: undefined,        /* Emulate specific hardware in mock mode */
     }
 
-    // rpio.init(options);
+    rpio.init(options);
     initAll();
 
     console.log("Relay module loaded");
@@ -54,7 +54,7 @@ Relay.prototype.disableAll = () => {
     console.log("Disabling all relays");
     Pins.iterate( (input, output, pin) => {
         // console.log("Disabling " + input + " to " + output + " connection on pin: " + pin);
-        // rpio.write(pin, rpio.LOW);
+        rpio.write(pin, rpio.LOW);
     });
 }
 
@@ -63,7 +63,7 @@ Relay.prototype.disableAll = () => {
 //     process.nextTick( () => {
 //         let pin = Pins[output][input];
 //         console.log("Enabling " + input + " to " + output + " connection on pin: " + pin);
-//         // rpio.write(pin, rpio.HIGH);
+//         rpio.write(pin, rpio.HIGH);
 //     });
 // };
 
@@ -73,7 +73,7 @@ Relay.prototype.setAll = (relayState) => {
         Pins.iterate( (input, output, pin) => {
             if (relayState[output] === input) {
                 console.log("Enabling " + input + " to " + output + " connection on pin: " + pin);
-                // rpio.write(pin, rpio.HIGH);
+                rpio.write(pin, rpio.HIGH);
             }
         });
     })
