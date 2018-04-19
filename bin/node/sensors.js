@@ -37,11 +37,13 @@ var sensorList = [
     {
         name: "bike",
         address: 0x40,
+        shunt_ohms: 0.01,
         rpmSensor: new RPMsensor(37)
     },
     {
         name: "handcrank",
         address: 0x41,
+        shunt_ohms: 0.1,
         rpmSensor: new RPMsensor(38)
     }
 ];
@@ -50,7 +52,7 @@ var sensorList = [
 function readSensor(sensorObj, socketObj) {
     statPacket = [];
 
-    PythonShell.run(pythonScript, {args: sensorObj.address}, function (err, data) {
+    PythonShell.run(pythonScript, {args: [sensorObj.address, sensorObj.shunt_ohms] }, function (err, data) {
         // Check if script returned an error
         if (err) return err;
 
