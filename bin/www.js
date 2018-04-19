@@ -34,9 +34,9 @@ var relay = new Relay();
  * Temperature module to read temperature sensors
  */
 
-const Temperature = require('./node/temperature.js');
+// const Temperature = require('./node/temperature.js');
 
-var temperature = new Temperature();
+// var temperature = new Temperature();
 
 /**
  * Function to be called when reading sensors
@@ -45,10 +45,32 @@ function readSensors() {
     // Read all sensors and emit using io object
     // console.log("Calling readSensors()");
     sensors.readAll(io);
-    temperature.readAll( (err, temps, energy) => {
-        console.log("Temps: ", temps);
-        console.log("Energy: ", energy);
-    });
+
+    // temperature.readAll( (err, temp_kettle, temp_ambient, energy) => {
+    //     console.log("Temp kettle: ", temp_kettle);
+    //     console.log("Temp ambient: ", temp_ambient);
+    //     console.log("Energy: ", energy);
+
+    //     let tempPacket = {
+    //         amount: temperature.mass,
+    //         target: temperature.target_temp,
+    //         kettle: temp_kettle,
+    //         ambient: temp_ambient,
+    //         energy: energy
+    //     };
+
+    //     io.emit('temps', tempPacket);
+    // });
+
+    let tempPacket = {
+        amount: 0.3,
+        target: 100,
+        kettle: 73.3,
+        ambient: 22.8,
+        energy: 900036.1
+    };
+
+    io.emit('temps', tempPacket);    
 };
 
 /**
