@@ -2,16 +2,16 @@ var rpio = require('rpio');
 
 const Pins = {
     lights: {
-        bike: 21,
-        handcrank: 22
+        bike: 29,
+        handcrank: 11
     },
     kettle: {
-        bike: 23,
-        handcrank: 24
+        bike: 31,
+        handcrank: 13
     },
     charger: {
-        bike: 11,
-        handcrank: 12
+        bike: 33,
+        handcrank: 15
     }
 };
 
