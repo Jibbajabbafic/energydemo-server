@@ -75,7 +75,7 @@ Temperature.prototype.readAll = function (callback) {
 
         let energy = this.heat_capacity*this.mass*(this.target_temp - temp_kettle);
 
-        callback(null, {kettle: temp_kettle, ambient: temp_ambient}, energy);
+        callback(null, temp_kettle, temp_ambient, energy);
     });
 };
 

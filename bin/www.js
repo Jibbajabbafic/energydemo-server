@@ -44,11 +44,39 @@ var temperature = new Temperature();
 function readSensors() {
     // Read all sensors and emit using io object
     // console.log("Calling readSensors()");
-    sensors.readAll(io);
-    temperature.readAll( (err, temps, energy) => {
-        console.log("Temps: ", temps);
-        console.log("Energy: ", energy);
+    sensors.readAll( (err, data) => {
+        if (err) return err;
+        
+        io.emit('stats', data);
     });
+
+    temperature.readAll( (err, temp_kettle, temp_ambient, energy) => {
+        if(err) return err;
+
+        console.log("Temp kettle: ", temp_kettle);
+        console.log("Temp ambient: ", temp_ambient);
+        console.log("Energy: ", energy);
+
+        let tempPacket = {
+            amount: temperature.mass,
+            target: temperature.target_temp,
+            kettle: temp_kettle,
+            ambient: temp_ambient,
+            energy: energy
+        };
+
+        io.emit('temps', tempPacket);
+    });
+
+    // let tempPacket = {
+    //     amount: 0.3,
+    //     target: 100,
+    //     kettle: 73.3,
+    //     ambient: 22.8,
+    //     energy: 900036.1
+    // };
+    // io.emit('temps', tempPacket);    
+
 };
 
 /**
@@ -122,23 +150,23 @@ io.on('connection', function (client) {
         io.emit('toggleStatus', readSensorFlag);
     });
 
-    client.on('relaySwitch', function (data) {
-        console.log(data);
+    // client.on('relaySwitch', function (data) {
+    //     console.log(data);
 
 
-        if (relayState[data.output] == data.input) {
-            relayState[data.output] = null;
-        }
-        else {
-            relayState[data.output] = data.input;
-            // relay.connect(data.input, data.output);
-        }
+    //     if (relayState[data.output] == data.input) {
+    //         relayState[data.output] = null;
+    //     }
+    //     else {
+    //         relayState[data.output] = data.input;
+    //         // relay.connect(data.input, data.output);
+    //     }
         
-        relay.disableAll();
-        relay.setAll(relayState);
+    //     relay.disableAll();
+    //     relay.setAll(relayState);
 
-        io.emit('relayStatus', relayState);
-    });    
+    //     io.emit('relayStatus', relayState);
+    // });    
 });
 
 /**

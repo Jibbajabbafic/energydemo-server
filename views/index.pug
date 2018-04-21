@@ -34,11 +34,17 @@ block content
             h2 Temperatures
             .temp-row
                 .column
+                    h3 Water:
                     h3 Target:  
                     h3 Ambient:
                     h3 Kettle:
-                    h3 Estimated time:
+                    h3 Estimated times
+                    h3 Bike:
+                    h3 Handcrank:
                 .column
+                    h3
+                        span#amount
+                        span ml
                     h3
                         span#target
                         span &degC
@@ -48,7 +54,11 @@ block content
                     h3
                         span#kettle
                         span &degC         
-                    #est-time
+                    br
+                    h3
+                        span#est-time-bike
+                    h3
+                        span#est-time-handcrank
 
             //- console.log("===================================================");
             //- console.log("Probes: ");

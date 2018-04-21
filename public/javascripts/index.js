@@ -47,6 +47,25 @@ function changeTab(tabID) {
 	$(".tab#" + tabID).show();
 };
 
+// Function to format seconds into hours, minutes and seconds
+function fancyTimeFormat(time) {   
+    // Hours, minutes and seconds
+    var hrs = ~~(time / 3600);
+    var mins = ~~((time % 3600) / 60);
+    var secs = Math.round(time % 60);
+
+    // Output like "1:01" or "4:03:59" or "123:03:59"
+    var ret = "";
+
+    if (hrs > 0) {
+        ret += "" + hrs + "hrs " + (mins < 10 ? "0" : "");
+    }
+
+    ret += "" + mins + "mins " + (secs < 10 ? "0" : "");
+    ret += "" + secs + "s ";
+    return ret;
+};
+
 // ------------------------------ Socket.io Code ------------------------------
 
 // Define socket which automatically uses the connected server
@@ -59,6 +78,28 @@ socket.on('stats', function(data) {
 
     // updateHolders(data, electricStats);
     updateStats(data);
+});
+
+socket.on('temps', function(data) {
+    console.log('Received temps: ');
+    console.log(data);
+
+    $('span#amount').text(data.amount*1000);
+    $('span#target').text(data.target);
+    $('span#ambient').text(data.ambient);
+    $('span#kettle').text(data.kettle);
+
+    let lastEntryBike = statList[0].powerArry.length - 1
+    let lastEntryHandcrank = statList[1].powerArry.length - 1
+
+    let powerBike = statList[0].powerArry[lastEntryBike].y;
+    let powerHandcrank = statList[1].powerArry[lastEntryHandcrank].y;
+
+    let timeBike = data.energy / powerBike;
+    let timeHandcrank = data.energy / powerHandcrank;
+
+    $('span#est-time-bike').text(fancyTimeFormat(timeBike));
+    $('span#est-time-handcrank').text(fancyTimeFormat(timeHandcrank));
 });
 
 // Code to update button colour based on if reading sensor

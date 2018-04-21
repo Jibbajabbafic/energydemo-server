@@ -8,13 +8,15 @@ from ina219 import INA219
 from ina219 import DeviceRangeError
 
 # Resistance of the shunt resistor (default = 0.1)
-SHUNT_OHMS = 0.1
+# SHUNT_OHMS = 0.1
 
 # Maximum expected currents (default = None)
 MAX_EXPECTED_AMPS = None
 
 # Input address arg
 ADDRESS = int(sys.argv[1])
+
+SHUNT_OHMS = float(sys.argv[2])
 
 STATS = {}
 
