@@ -5,30 +5,6 @@ const Probe = {
     ambient: "28-031760640fff"
 };
 
-var readProbes = (callback) => {
-    // ds18.getAll( (err, tempObj) => {
-    //     if(err) callback(err);
-        
-    //     let temp_kettle = tempObj[Probe.kettle];
-    //     let temp_ambient = tempObj[Probe.ambient];
-
-    //     if(!temp_kettle) callback(new Error("Can't read kettle probe!"));
-    //     if(!temp_ambient) callback(new Error("Can't read ambient probe!"));
-
-    //     callback(null, {kettle: temp_kettle, ambient: temp_ambient});
-    // })
-    
-    ds18.get([Probe.kettle, Probe.ambient], function (err, tempList) {
-        let temp_kettle = tempList[0];
-        let temp_ambient = tempList[1];
-
-        if(!temp_kettle) callback(new Error("Can't read kettle probe!"));
-        if(!temp_ambient) callback(new Error("Can't read ambient probe!"));
-
-        callback(null, {kettle: temp_kettle, ambient: temp_ambient});
-    });
-}
-
 function fancyTimeFormat(time) {   
     // Hours, minutes and seconds
     var hrs = ~~(time / 3600);

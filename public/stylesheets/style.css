@@ -9,14 +9,13 @@ a {
     color: #00B7FF;
 }
 
-/* nav {
-
-} */
-
 .tab {
-    display: none;
     min-height: 5em;
     margin: auto;
+}
+
+.graphs {
+    display: inline;
 }
 
 img#lightbulb {
@@ -31,6 +30,8 @@ img#lightbulb {
     width: 100%;
     margin: auto;
     min-height: 400px;
+    display: flex;
+    justify-content: space-around;
 }
 
 .statsHolder {
@@ -40,16 +41,25 @@ img#lightbulb {
 }
 
 .chartAdv{
-    display: inline-block;
-    width: 24%;
-    min-width: 3em;
+    /* display: inline-block; */
+    /* width: 24%; */
+    flex: 24%;
+    min-width: 200px;
+    height: 400px;
 }
 
 .chartBasic {
     /* float: left;
     clear: both; */
     height: 400px;
-    min-width: 80%;
+    /* width: 50%; */
+    min-width: 200px;
+    max-width: 40%;
+    flex: 40%;
+}
+
+nav.graph {
+    margin-left: 12.5%;
 }
 
 .stat {
@@ -60,50 +70,43 @@ img#lightbulb {
     margin: 0 auto;
 }
 
+.iconHeader {
+    font-size: 5em;
+    /* display: inline-flex; */
+}
+
+.titleHeader {
+    padding-left: 2em;
+}
+
+.titleBox {
+    display: flex;
+    margin-bottom: 1em;
+}
+
 .banner, .content {
     /* min-width: 80%; */
+    display: block;
     min-height: 5em;
-    margin-left: 5em;
-    margin-right: 5em;
+    /* margin-left: 5em;
+    margin-right: 5em; */
+    margin: auto;
     padding: 0em 10em;
+    padding-top: 2em;
     background-color: white;
 }
 
 .content {
-    padding: 0em 5em;
+    padding: 0em 10em;
     padding-bottom: 2em;
 }
 
 .bannerBox {
-    display: inline-block;
+    /* display: inline-block; */
     min-width: 5em;
     max-width: 75%;
     vertical-align: top;
-}
-
-/* =============== Temperature display specific CSS =============== */
-
-.temp-box {
-    position: relative;
-    right: 5em;
-    /* max-width: 25%; */
-    /* min-width: 20em; */
-    width: 18em;
-    /* background: #b2dbeb; */
-    padding: 1em;
-}
-
-.temp-row {
-    display: flex;
-    /* align-items: center;
-    justify-content: center; */
-    /* max-width: 25%; */
-}
-
-/* =============== Login page specific CSS =============== */
-
-label {
-    font-weight: bold;
+    margin: auto;
 }
 
 button, input[type=submit] {
@@ -117,10 +120,53 @@ button, input[type=submit] {
     border-color: #315b79;
 }
 
-button.nav, input[type=submit] {
+button.nav, input[type=submit], button.graph, button#temperature {
     min-width: 10em;
     /* margin: 0.2em; */
     /* padding: 0.5em 1em;     */
+}
+
+.enabled {
+    background-color: #90e79e;
+}
+
+.disabled {
+    background-color: #e79090;
+}
+
+/* =============== Temperature display specific CSS =============== */
+
+.temp-box {
+    position: relative;
+    /* max-width: 25%; */
+    /* min-width: 20em; */
+    width: 18em;
+    /* background: #b2dbeb; */
+    padding: 1em;
+    padding-left: 12.5%;
+}
+
+.temp-row {
+    display: flex;
+    /* align-items: center;
+    justify-content: center; */
+    /* max-width: 25%; */
+}
+
+/* =============== Login page specific CSS =============== */
+
+form.login {
+    /* margin: auto; */
+    /* width: 10em; */
+    padding-top: 2em;
+    width: 11em;
+    vertical-align: top;
+    margin: auto;
+    margin-left: 12.5%;
+}
+
+label {
+    font-weight: bold;
 }
 
 .loginError {
@@ -129,6 +175,7 @@ button.nav, input[type=submit] {
     font-weight: bold;
     border-radius: 1em;
     text-align: center;
+    margin: 1em 0em;
 }
 
 /* =============== Settings page specific CSS =============== */
@@ -142,8 +189,16 @@ button.nav, input[type=submit] {
 }
 
 .relaySettings {
-    display: flex;
     flex: 80%;
+}
+
+.relayHeader {
+    /* max-width: 50%; */
+    margin-left: 10%;
+}
+
+.outputHolder {
+    display: flex;
     justify-content: space-around;
     /* justify-content: safe; */
 }

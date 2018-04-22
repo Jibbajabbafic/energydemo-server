@@ -2,27 +2,30 @@ extends layout
 
 block banner
     .banner
-        img(src='/images/lightbulb.png').bannerBox#lightbulb
+        //- img(src='/images/lightbulb.png').bannerBox#lightbulb
         .bannerBox
-            h1= title
-
-            a(href='/')
-                button.nav#home Home
-
-            form(action="/login", method="post")
-                label(for="username") Username
-                br
-                input(type="text", name="username", required)
-                br
-                label(for="password") Password
-                br
-                input(type="password", name="password", required)
-                if message
-                    .loginError= message
-                input(type="submit", value="Login")
+            .titleBox
+                span.iconHeader
+                    i.fas.fa-sign-in-alt
+                span.titleHeader
+                    h1= title
+            p
+            nav
+                a(href='/')
+                    button.nav#home Home
 
 block content
     .content
-
+        form(action="/login", method="post").login
+            label(for="username") Username
+            br
+            input(type="text", name="username", required)
+            br
+            label(for="password") Password
+            br
+            input(type="password", name="password", required)
+            if message
+                .loginError= message
+            input(type="submit", value="Login")
 
 

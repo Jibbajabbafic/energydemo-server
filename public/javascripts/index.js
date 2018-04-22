@@ -41,9 +41,11 @@ function changeTab(tabID) {
 	// Hide all tabs
     $(".tab").hide();
     $("button.nav").prop('disabled', false);
-    
+    $("button.nav").css('background-color', '#90c2e7');
+
     // Show specified tab with id = tabID
-    $("button.nav#" + tabID).prop('disabled', true);
+    $("button.nav#"+tabID).prop('disabled', true);
+    $("button.nav#"+tabID).css('background-color', '#90e79e');
 	$(".tab#" + tabID).show();
 };
 
@@ -123,22 +125,41 @@ socket.on('toggleStatus', function(data){
 
 $(document).ready( function() {
     
-    // ----- Button Code -----
-    
-    $('button#toggleRead').on('click', function(){
-        console.log('TOGGLING');
-        socket.emit('toggle', '');
-    });
+    // start with basic charts as default
+    changeTab("basic");
+
+    // ----- Nav Button Code -----
 
     $('button#basic').on('click', function(){
         console.log('Switching to basic view');
+        // $('.navTab').toggleClass('enabled');
         changeTab("basic");
+        // $('.tab').toggle();
     });
 
     $('button#advanced').on('click', function(){
         console.log('Switching to advanced view');
         changeTab("advanced");
+        // $('.navTab').toggleClass('enabled');
+        // $('.tab').toggle();
     });
+
+    $('button#temperature').on('click', function(){
+        $(this).toggleClass('enabled disabled');
+        $('.temp-box').toggle();
+    });    
+
+    // ----- Graph Button Code -----
+
+    $('button#bike').on('click', function(){
+        $(this).toggleClass('enabled disabled');
+        $('.chartHolder.bike#advanced').toggle();
+    });
+
+    $('button#handcrank').on('click', function(){
+        $(this).toggleClass('enabled disabled');
+        $('.chartHolder.handcrank#advanced').toggle();
+    });    
 
     // ------------------------------ CanvasJS stuff ------------------------------
 
@@ -195,7 +216,7 @@ $(document).ready( function() {
             ]
         },
         data: [{
-            type: "bar",
+            type: "column",
             xValueType: "dateTime",
             xValueFormatString: "HH:mm:ss.fff",
             dataPoints: statList[0].powerArryBasic
@@ -254,7 +275,7 @@ $(document).ready( function() {
             ]
         },
         data: [{
-            type: "bar",
+            type: "column",
             xValueType: "dateTime",
             xValueFormatString: "HH:mm:ss.fff",
             dataPoints: statList[1].powerArryBasic

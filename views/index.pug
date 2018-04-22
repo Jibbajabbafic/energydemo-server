@@ -2,21 +2,26 @@ extends layout
 
 block banner
     .banner
-        img(src='/images/lightbulb.png').bannerBox#lightbulb
+        //- img(src='/images/lightbulb.png').bannerBox#lightbulb
         .bannerBox
-            h1= title
+            .titleBox
+                span.iconHeader
+                    i.fas.fa-bolt
+                span.titleHeader
+                    h1= title
             //- p Welcome to #{title}
-            p This website is for the energy demonstration system running on a Raspberry Pi.
+            p This website is for use with the human powered electrical energy demonstration system running on a Raspberry Pi.
+            p Please login if you wish to access additional settings.
             
             nav
                 // Button to change to basic view
-                button.nav#basic Basic view
+                button.nav#basic Bar Charts
                 
                 // Button to change to advanced view
-                button.nav#advanced Advanced view
+                button.nav#advanced Line Charts
 
                 //- // Button to toggle readings
-                //- button#toggleRead Toggle Readings
+                button.enabled#temperature Temperatures
 
                 a(href='/settings')
                     button.nav#settings Settings
@@ -29,7 +34,27 @@ block banner
                         button.nav#login Login
              
 block content
-    .content
+    .content       
+        .graphs
+            .tab#basic
+                .chartHolder#basic
+                    .chartBasic#chartContainerPower1
+                    .chartBasic#chartContainerPower2
+            .tab#advanced
+                nav.graph
+                    button.graph.enabled#bike Bike
+                    button.graph.enabled#handcrank Handcrank
+                .chartHolder.bike#advanced
+                    .chartAdv#chartContainer1
+                    .chartAdv#chartContainer2
+                    .chartAdv#chartContainer3
+                    .chartAdv#chartContainer4        
+                .chartHolder.handcrank#advanced
+                    .chartAdv#chartContainer5
+                    .chartAdv#chartContainer6
+                    .chartAdv#chartContainer7
+                    .chartAdv#chartContainer8
+                        
         .temp-box
             h2 Temperatures
             .temp-row
@@ -59,21 +84,4 @@ block content
                     h3
                         span#est-time-bike
                     h3
-                        span#est-time-handcrank
-                   
-        .graphs
-            .tab#basic
-                    .chartHolder#basic
-                        .chartBasic#chartContainerPower1
-                        .chartBasic#chartContainerPower2
-            .tab#advanced
-                    .chartHolder#advanced
-                        .chartAdv#chartContainer1
-                        .chartAdv#chartContainer2
-                        .chartAdv#chartContainer3
-                        .chartAdv#chartContainer4        
-                    .chartHolder#advanced
-                        .chartAdv#chartContainer5
-                        .chartAdv#chartContainer6
-                        .chartAdv#chartContainer7
-                        .chartAdv#chartContainer8
+                        span#est-time-handcrank                        

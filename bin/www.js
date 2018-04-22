@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 
 /**
+ * Port to host server on
+ */
+var PORT = 80;
+
+/**
  * Time between samples in seconds (will lag a lot if set too low!)
  */
 var SAMPLE_TIME = 1;
@@ -83,7 +88,7 @@ function readSensors() {
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || PORT);
 app.set('port', port);
 
 /**
@@ -150,23 +155,23 @@ io.on('connection', function (client) {
         io.emit('toggleStatus', readSensorFlag);
     });
 
-     client.on('relaySwitch', function (data) {
-         console.log(data);
+    //  client.on('relaySwitch', function (data) {
+    //      console.log(data);
 
 
-         if (relayState[data.output] == data.input) {
-             relayState[data.output] = null;
-         }
-         else {
-             relayState[data.output] = data.input;
-             // relay.connect(data.input, data.output);
-         }
+    //      if (relayState[data.output] == data.input) {
+    //          relayState[data.output] = null;
+    //      }
+    //      else {
+    //          relayState[data.output] = data.input;
+    //          // relay.connect(data.input, data.output);
+    //      }
         
-         relay.disableAll();
-         relay.setAll(relayState);
+    //      relay.disableAll();
+    //      relay.setAll(relayState);
 
-         io.emit('relayStatus', relayState);
-     });    
+    //      io.emit('relayStatus', relayState);
+    //  });    
 });
 
 /**
