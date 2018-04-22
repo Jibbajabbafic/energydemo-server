@@ -30,8 +30,8 @@ def read_sensor(address):
     try:
         stats['time'] = str(datetime.utcnow())
         stats['voltage'] = ina.voltage()
-        stats['current'] = ina.current()
-        stats['power'] = ina.power()
+        stats['current'] = ina.current()/1000
+        stats['power'] = ina.power()/1000
 
     except DeviceRangeError as error_msg:
         # Current out of device range with specified shunt resistor

@@ -49,6 +49,8 @@ function changeTab(tabID) {
 
 // Function to format seconds into hours, minutes and seconds
 function fancyTimeFormat(time) {   
+    if (time == Infinity) return "Never";
+    console.log("Time input: ", time);
     // Hours, minutes and seconds
     var hrs = ~~(time / 3600);
     var mins = ~~((time % 3600) / 60);
@@ -60,10 +62,15 @@ function fancyTimeFormat(time) {
     if (hrs > 0) {
         ret += "" + hrs + "hrs " + (mins < 10 ? "0" : "");
     }
-
-    ret += "" + mins + "mins " + (secs < 10 ? "0" : "");
+   
+    if (mins > 0) {
+        ret += "" + mins + "mins " + (secs < 10 ? "0" : "");
+    }
+    
     ret += "" + secs + "s ";
+    
     return ret;
+
 };
 
 // ------------------------------ Socket.io Code ------------------------------
@@ -94,12 +101,13 @@ socket.on('temps', function(data) {
 
     let powerBike = statList[0].powerArry[lastEntryBike].y;
     let powerHandcrank = statList[1].powerArry[lastEntryHandcrank].y;
-
+    
     let timeBike = data.energy / powerBike;
     let timeHandcrank = data.energy / powerHandcrank;
-
+    
     $('span#est-time-bike').text(fancyTimeFormat(timeBike));
     $('span#est-time-handcrank').text(fancyTimeFormat(timeHandcrank));
+
 });
 
 // Code to update button colour based on if reading sensor

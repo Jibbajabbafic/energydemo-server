@@ -46,16 +46,16 @@ function readSensors() {
     // console.log("Calling readSensors()");
     sensors.readAll( (err, data) => {
         if (err) return err;
-        
+        // console.log(data);
         io.emit('stats', data);
     });
 
     temperature.readAll( (err, temp_kettle, temp_ambient, energy) => {
         if(err) return err;
 
-        console.log("Temp kettle: ", temp_kettle);
-        console.log("Temp ambient: ", temp_ambient);
-        console.log("Energy: ", energy);
+        // console.log("Temp kettle: ", temp_kettle);
+        // console.log("Temp ambient: ", temp_ambient);
+        // console.log("Energy: ", energy);
 
         let tempPacket = {
             amount: temperature.mass,

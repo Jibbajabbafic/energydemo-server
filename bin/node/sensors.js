@@ -1,4 +1,4 @@
-var USE_RANDOM_DATA = true;
+var USE_RANDOM_DATA = false;
 
 var pythonScript;
 var RPMsensor;
