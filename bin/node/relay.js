@@ -3,7 +3,7 @@ var rpio = require('rpio');
 const Pins = {
     lights: {
         bike: 29,
-        handcrank: 11
+        handcrank: 15
     },
     kettle: {
         bike: 31,
@@ -11,7 +11,7 @@ const Pins = {
     },
     charger: {
         bike: 33,
-        handcrank: 15
+        handcrank: 11
     }
 };
 
@@ -62,7 +62,7 @@ Relay.prototype.disableAll = () => {
 //     // make the connection call asynchronous
 //     process.nextTick( () => {
 //         let pin = Pins[output][input];
-//         console.log("Enabling " + input + " to " + output + " connection on pin: " + pin);
+//         // console.log("Enabling " + input + " to " + output + " connection on pin: " + pin);
 //         rpio.write(pin, rpio.HIGH);
 //     });
 // };
@@ -72,7 +72,7 @@ Relay.prototype.setAll = (relayState) => {
     process.nextTick(() => {
         Pins.iterate( (input, output, pin) => {
             if (relayState[output] === input) {
-                console.log("Enabling " + input + " to " + output + " connection on pin: " + pin);
+                // console.log("Enabling " + input + " to " + output + " connection on pin: " + pin);
                 rpio.write(pin, rpio.HIGH);
             }
         });

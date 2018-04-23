@@ -38,13 +38,13 @@ var sensorList = [
         name: "bike",
         address: 0x40,
         shunt_ohms: 0.01,
-        rpmSensor: new RPMsensor(37)
+        rpmSensor: new RPMsensor(16)
     },
     {
         name: "handcrank",
         address: 0x41,
         shunt_ohms: 0.1,
-        rpmSensor: new RPMsensor(38)
+        rpmSensor: new RPMsensor(18)
     }
 ];
 

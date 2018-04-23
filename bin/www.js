@@ -3,7 +3,7 @@
 /**
  * Port to host server on
  */
-var PORT = 80;
+var PORT = 3000;
 
 /**
  * Time between samples in seconds (will lag a lot if set too low!)
@@ -156,7 +156,7 @@ io.on('connection', function (client) {
     });
 
      client.on('relaySwitch', function (data) {
-         console.log(data);
+         // console.log(data);
 
 
          if (relayState[data.output] == data.input) {
