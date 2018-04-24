@@ -43,8 +43,13 @@ Temperature.prototype.readAll = function (callback) {
     ds18.get([Probe.kettle, Probe.ambient], (err, tempList) => {
 	if (err) callback(err);
 
-        let temp_kettle = tempList[0];
-        let temp_ambient = tempList[1];
+	let temp_kettle = 0;
+        let temp_ambient = 0;
+
+        if (tempList) {
+            temp_kettle = tempList[0];
+            temp_ambient = tempList[1];
+        };
         
         if(!temp_kettle) callback(new Error("Can't read kettle probe!"));
         if(!temp_ambient) callback(new Error("Can't read ambient probe!"));
